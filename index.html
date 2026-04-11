@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura Auto</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050810;--surf:#0C1220;--card:#131B2E;--pri:#0EA5E9;--acc:#64748B;--bdr:#1E293B;--txt:#E2E8F0;--muted:#94A3B8;--green:#22C55E;--yellow:#F59E0B;--red:#EF4444;--orange:#F97316}
+body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',sans-serif;font-size:14px;min-height:100vh;display:flex}
+a{color:inherit;text-decoration:none}
+/* Layout */
+#sidebar{width:220px;min-height:100vh;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:50}
+#main{margin-left:220px;flex:1;min-height:100vh;padding:24px}
+.logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--bdr)}
+.logo-sq{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0EA5E9,#64748B);display:grid;place-items:center;flex-shrink:0}
+.logo-sq svg{width:20px;height:20px}
+.logo-name{font-weight:700;font-size:15px;letter-spacing:.3px}
+.logo-sub{font-size:10px;color:var(--muted)}
+nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--muted);transition:all .15s;margin-bottom:2px;font-size:13px}
+.nav-item:hover{background:var(--card);color:var(--txt)}
+.nav-item.active{background:rgba(14,165,233,.15);color:var(--pri)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+/* Mobile */
+#topbar{display:none;position:fixed;top:0;left:0;right:0;height:52px;background:var(--surf);border-bottom:1px solid var(--bdr);align-items:center;padding:0 16px;gap:12px;z-index:50}
+#bottomnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bdr);z-index:50}
+.bnav-wrap{display:flex;justify-content:space-around}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;cursor:pointer;color:var(--muted);font-size:10px;transition:color .15s}
+.bnav-item.active{color:var(--pri)}
+.bnav-item svg{width:18px;height:18px}
+/* Cards & Grid */
+.page{display:none}.page.active{display:block}
+.page-title{font-size:18px;font-weight:700;margin-bottom:20px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:16px}
+.kpi-val{font-size:26px;font-weight:700;color:var(--pri)}
+.kpi-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:16px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-title{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+/* Table */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--bdr)}
+td{padding:9px 10px;border-bottom:1px solid rgba(30,41,59,.5);font-size:13px}
+tr:last-child td{border-bottom:none}
+tr.clickable{cursor:pointer}
+tr.clickable:hover td{background:rgba(14,165,233,.05)}
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.b-rcb{background:rgba(100,116,139,.2);color:#94A3B8}
+.b-diag{background:rgba(245,158,11,.15);color:#F59E0B}
+.b-rep{background:rgba(249,115,22,.15);color:#F97316}
+.b-work{background:rgba(14,165,233,.15);color:#0EA5E9}
+.b-done{background:rgba(34,197,94,.15);color:#22C55E}
+.b-del{background:rgba(100,116,139,.2);color:#64748B}
+.badge-red{background:rgba(239,68,68,.15);color:#EF4444}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s}
+.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:#0284C7}
+.btn-sec{background:var(--bdr);color:var(--txt)}.btn-sec:hover{background:#2D3F55}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--bdr)}.btn-ghost:hover{color:var(--txt);border-color:var(--acc)}
+.btn-red{background:rgba(239,68,68,.15);color:#EF4444}.btn-red:hover{background:rgba(239,68,68,.25)}
+.btn-sm{padding:4px 10px;font-size:12px}
+/* Forms */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:12px;color:var(--muted)}
+.form-group.full{grid-column:1/-1}
+input,select,textarea{background:var(--surf);border:1px solid var(--bdr);color:var(--txt);border-radius:8px;padding:8px 12px;font-size:13px;width:100%;outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--pri)}
+select option{background:var(--surf)}
+textarea{resize:vertical;min-height:70px}
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;overflow-y:auto}
+.modal-bg.open{display:flex;align-items:flex-start;justify-content:center;padding:40px 16px}
+.modal{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;width:100%;max-width:620px;padding:24px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:700}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;padding:4px}
+.modal-close:hover{color:var(--txt)}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+/* OT Detail */
+.ot-section{margin-bottom:20px}
+.ot-section-title{font-size:12px;font-weight:600;text-transform:uppercase;color:var(--muted);margin-bottom:10px;letter-spacing:.5px}
+.inline-form{display:flex;gap:8px;margin-bottom:8px}
+.inline-form input{flex:1}
+.totals-row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--bdr);margin-top:8px}
+.total-final{font-size:18px;font-weight:700;color:var(--pri)}
+/* Status bar */
+.status-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px}
+.st-step{padding:5px 12px;border-radius:20px;font-size:11px;border:1px solid var(--bdr);cursor:pointer;color:var(--muted);transition:all .15s}
+.st-step.active{border-color:var(--pri);background:rgba(14,165,233,.15);color:var(--pri)}
+/* Search */
+.search-box{position:relative;margin-bottom:16px}
+.search-box input{padding-left:34px}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+/* Alert */
+.alert{padding:10px 14px;border-radius:8px;margin-bottom:12px;font-size:13px}
+.alert-red{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#EF4444}
+.alert-yellow{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:#F59E0B}
+/* Sub tabs */
+.sub-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--card);padding:4px;border-radius:10px;width:fit-content}
+.sub-tab{padding:6px 16px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;transition:all .15s}
+.sub-tab.active{background:var(--pri);color:#fff}
+/* Caja */
+.caja-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.metodo-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(30,41,59,.5)}
+.metodo-row:last-child{border-bottom:none}
+/* Print */
+@media print{#sidebar,#topbar,#bottomnav,.no-print{display:none!important}#main{margin:0!important;padding:0!important}}
+/* Responsive */
+@media(max-width:768px){
+  #sidebar{display:none}
+  #topbar{display:flex}
+  #bottomnav{display:block}
+  #main{margin-left:0;padding:12px;padding-top:64px;padding-bottom:68px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .caja-grid{grid-template-columns:1fr}
+  .modal-bg{padding:12px}
+  th.hide-m,td.hide-m{display:none}
+}
+/* Misc */
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.flex{display:flex}.gap-8{gap:8px}.gap-4{gap:4px}.items-center{align-items:center}.justify-between{justify-content:space-between}.mb-12{margin-bottom:12px}.mb-4{margin-bottom:4px}
+.text-sm{font-size:12px}.text-muted{color:var(--muted)}.text-pri{color:var(--pri)}.text-green{color:var(--green)}.text-red{color:var(--red)}.fw-7{font-weight:700}
+.w-full{width:100%}.mt-8{margin-top:8px}.mt-12{margin-top:12px}
+.empty{text-align:center;padding:32px;color:var(--muted)}
+.tag{display:inline-block;background:rgba(14,165,233,.1);color:var(--pri);border-radius:4px;padding:1px 6px;font-size:11px;margin:1px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="logo">
+    <div class="logo-sq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+      </svg>
+    </div>
+    <div><div class="logo-name">Aura Auto</div><div class="logo-sub">Taller Mecánico</div></div>
+  </div>
+  <nav id="sidenav"></nav>
+  <div style="padding:12px 16px;border-top:1px solid var(--bdr)">
+    <div class="text-sm text-muted">v1.0 · Demo</div>
+  </div>
+</div>
+
+<!-- MOBILE TOPBAR -->
+<div id="topbar">
+  <div class="logo-sq">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+      <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+    </svg>
+  </div>
+  <span style="font-weight:700;font-size:15px">Aura Auto</span>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<div id="bottomnav"><div class="bnav-wrap" id="bnav"></div></div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dash">
+    <div class="page-title">Dashboard</div>
+    <div class="kpi-grid" id="kpi-grid"></div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">OTs Activas</span></div>
+      <table><thead><tr><th>N°</th><th>Cliente</th><th>Patente</th><th class="hide-m">Técnico</th><th>Estado</th></tr></thead>
+      <tbody id="dash-ots"></tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Repuestos Críticos</span></div>
+      <table><thead><tr><th>Código</th><th>Nombre</th><th>Stock</th><th>Mínimo</th></tr></thead>
+      <tbody id="dash-reps"></tbody></table>
+    </div>
+  </div>
+
+  <!-- OTs -->
+  <div class="page" id="page-ots">
+    <div class="flex justify-between items-center mb-12">
+      <div class="page-title" style="margin:0">Órdenes de Trabajo</div>
+      <button class="btn btn-pri" onclick="openNewOT()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva OT</button>
+    </div>
+    <div class="search-box">
+      <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input type="text" id="ot-search" placeholder="Buscar OT, cliente, patente..." oninput="renderOTs()">
+    </div>
+    <div id="ot-filters" class="flex gap-4 mb-12" style="flex-wrap:wrap"></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table><thead><tr><th>N° OT</th><th>Cliente</th><th>Patente</th><th class="hide-m">Técnico</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+      <tbody id="ot-list"></tbody></table>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="page" id="page-hist">
+    <div class="page-title">Historial por Patente</div>
+    <div class="search-box">
+      <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input type="text" id="hist-search" placeholder="Ingresar patente (ej: ABC123)..." oninput="searchHist()">
+    </div>
+    <div id="hist-results"></div>
+  </div>
+
+  <!-- REPUESTOS -->
+  <div class="page" id="page-reps">
+    <div class="flex justify-between items-center mb-12">
+      <div class="page-title" style="margin:0">Repuestos / Inventario</div>
+      <button class="btn btn-pri" onclick="openRepModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo</button>
+    </div>
+    <div id="rep-alerts"></div>
+    <div class="search-box">
+      <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input type="text" id="rep-search" placeholder="Buscar código, nombre..." oninput="renderReps()">
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table><thead><tr><th>Código</th><th>Nombre</th><th class="hide-m">Categoría</th><th>Stock</th><th>Mín</th><th class="hide-m">P.Costo</th><th>P.Venta</th><th></th></tr></thead>
+      <tbody id="rep-list"></tbody></table>
+    </div>
+  </div>
+
+  <!-- CLIENTES & TÉCNICOS -->
+  <div class="page" id="page-ct">
+    <div class="page-title">Clientes &amp; Técnicos</div>
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="switchCT('cli',this)">Clientes</div>
+      <div class="sub-tab" onclick="switchCT('tec',this)">Técnicos</div>
+    </div>
+    <div id="ct-cli">
+      <div class="flex justify-between items-center mb-12">
+        <div class="text-muted text-sm" id="cli-count"></div>
+        <button class="btn btn-pri btn-sm" onclick="openCliModal()">+ Nuevo Cliente</button>
+      </div>
+      <div id="cli-list"></div>
+    </div>
+    <div id="ct-tec" style="display:none">
+      <div class="flex justify-between items-center mb-12">
+        <div class="text-muted text-sm" id="tec-count"></div>
+        <button class="btn btn-pri btn-sm" onclick="openTecModal()">+ Nuevo Técnico</button>
+      </div>
+      <div id="tec-list"></div>
+    </div>
+  </div>
+
+  <!-- CAJA -->
+  <div class="page" id="page-caja">
+    <div class="page-title">Caja del Día</div>
+    <div id="caja-content"></div>
+  </div>
+</div>
+
+<!-- MODAL: Nueva/Editar OT -->
+<div class="modal-bg" id="modal-ot">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="mot-title">Nueva Orden de Trabajo</div>
+      <button class="modal-close" onclick="closeModal('modal-ot')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Patente *</label><input id="ot-pat" placeholder="ABC123" oninput="autoFillVehicle(this.value.toUpperCase())" style="text-transform:uppercase"></div>
+      <div class="form-group"><label>Cliente *</label><input id="ot-cli" placeholder="Nombre completo"></div>
+      <div class="form-group"><label>Teléfono</label><input id="ot-tel" placeholder="+56 9 ..."></div>
+      <div class="form-group"><label>Técnico</label>
+        <select id="ot-tec"><option value="">Sin asignar</option></select>
+      </div>
+      <div class="form-group"><label>Marca</label><input id="ot-marca" placeholder="Toyota"></div>
+      <div class="form-group"><label>Modelo</label><input id="ot-modelo" placeholder="Corolla"></div>
+      <div class="form-group"><label>Año</label><input id="ot-anio" type="number" placeholder="2020"></div>
+      <div class="form-group"><label>Kilometraje</label><input id="ot-km" type="number" placeholder="85000"></div>
+      <div class="form-group full"><label>Motivo / Descripción *</label><textarea id="ot-motivo" placeholder="Descripción del problema..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ot')">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveOT()">Guardar OT</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Ver OT -->
+<div class="modal-bg" id="modal-otv">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <div class="modal-title" id="motv-title">OT-0001</div>
+      <div class="flex gap-8">
+        <button class="btn btn-ghost btn-sm no-print" onclick="printOT()">🖨 Imprimir</button>
+        <button class="modal-close" onclick="closeModal('modal-otv')">×</button>
+      </div>
+    </div>
+    <div id="otv-body"></div>
+  </div>
+</div>
+
+<!-- MODAL: Repuesto -->
+<div class="modal-bg" id="modal-rep">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="mrep-title">Nuevo Repuesto</div>
+      <button class="modal-close" onclick="closeModal('modal-rep')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Código *</label><input id="rep-cod" placeholder="FLT-001"></div>
+      <div class="form-group"><label>Nombre *</label><input id="rep-nom" placeholder="Filtro de aceite"></div>
+      <div class="form-group"><label>Marca</label><input id="rep-marca" placeholder="Mann"></div>
+      <div class="form-group"><label>Categoría</label>
+        <select id="rep-cat"><option>Motor</option><option>Frenos</option><option>Suspensión</option><option>Electricidad</option><option>Filtros</option><option>Otros</option></select>
+      </div>
+      <div class="form-group"><label>Stock</label><input id="rep-stock" type="number" placeholder="10"></div>
+      <div class="form-group"><label>Stock Mínimo</label><input id="rep-min" type="number" placeholder="3"></div>
+      <div class="form-group"><label>Precio Costo</label><input id="rep-pcosto" type="number" placeholder="0"></div>
+      <div class="form-group"><label>Precio Venta</label><input id="rep-pventa" type="number" placeholder="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rep')">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveRep()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Cliente -->
+<div class="modal-bg" id="modal-cli">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="mcli-title">Nuevo Cliente</div>
+      <button class="modal-close" onclick="closeModal('modal-cli')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Nombre *</label><input id="cli-nom" placeholder="Juan Pérez"></div>
+      <div class="form-group"><label>Teléfono</label><input id="cli-tel" placeholder="+56 9 ..."></div>
+      <div class="form-group"><label>Email</label><input id="cli-email" placeholder="email@..."></div>
+      <div class="form-group"><label>RUT / ID</label><input id="cli-rut" placeholder="12.345.678-9"></div>
+      <div class="form-group full"><label>Cuenta Corriente (CC) — dejar en 0 si no aplica</label><input id="cli-cc" type="number" placeholder="0" value="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-cli')">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveCli()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Técnico -->
+<div class="modal-bg" id="modal-tec">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="mtec-title">Nuevo Técnico</div>
+      <button class="modal-close" onclick="closeModal('modal-tec')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Nombre *</label><input id="tec-nom" placeholder="Pedro González"></div>
+      <div class="form-group"><label>Especialidad</label><input id="tec-esp" placeholder="Motor, Frenos..."></div>
+      <div class="form-group"><label>Teléfono</label><input id="tec-tel" placeholder="+56 9 ..."></div>
+      <div class="form-group"><label>Comisión %</label><input id="tec-com" type="number" placeholder="10" min="0" max="100"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tec')">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveTec()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Entrada de Mercadería -->
+<div class="modal-bg" id="modal-entrada">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Entrada de Stock</div>
+      <button class="modal-close" onclick="closeModal('modal-entrada')">×</button>
+    </div>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      <div class="form-group"><label>Repuesto</label><input id="ent-nom" disabled></div>
+      <div class="form-group"><label>Cantidad a ingresar</label><input id="ent-qty" type="number" min="1" placeholder="1"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-entrada')">Cancelar</button>
+      <button class="btn btn-pri" onclick="confirmarEntrada()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Pago OT -->
+<div class="modal-bg" id="modal-pago">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Registrar Entrega y Pago</div>
+      <button class="modal-close" onclick="closeModal('modal-pago')">×</button>
+    </div>
+    <div id="pago-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pago')">Cancelar</button>
+      <button class="btn btn-pri" onclick="confirmarPago()">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const KEY='aauto-v1';
+let D=loadD();
+
+function loadD(){
+  const s=localStorage.getItem(KEY);
+  if(s) return JSON.parse(s);
+  return initData();
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(D));}
+
+function initData(){
+  const data={
+    ots:[],reps:[],clientes:[],tecnicos:[],caja:[],nextOT:9
+  };
+  // Técnicos
+  data.tecnicos=[
+    {id:'t1',nom:'Pedro González',esp:'Motor / Transmisión',tel:'+56 9 8111 2222',com:12},
+    {id:'t2',nom:'Luis Herrera',esp:'Electricidad / Frenos',tel:'+56 9 9333 4444',com:10}
+  ];
+  // Clientes
+  data.clientes=[
+    {id:'c1',nom:'Carlos Mendoza',tel:'+56 9 7654 3210',email:'cmendoza@mail.com',rut:'12.345.678-9',cc:0},
+    {id:'c2',nom:'Ana Torres',tel:'+56 9 6543 2109',email:'atorres@mail.com',rut:'9.876.543-2',cc:0},
+    {id:'c3',nom:'Roberto Silva',tel:'+56 9 5432 1098',email:'rsilva@mail.com',rut:'15.432.100-K',cc:0},
+    {id:'c4',nom:'Flota Expressa Ltda.',tel:'+56 2 2345 6789',email:'flota@expressa.cl',rut:'76.543.210-3',cc:250000}
+  ];
+  // Repuestos
+  data.reps=[
+    {id:'r1',cod:'FLT-001',nom:'Filtro de aceite Mann',marca:'Mann',cat:'Filtros',stock:8,min:5,pcosto:3500,pventa:6500},
+    {id:'r2',cod:'FLT-002',nom:'Filtro de aire K&N',marca:'K&N',cat:'Filtros',stock:3,min:4,pcosto:12000,pventa:22000},
+    {id:'r3',cod:'FRN-001',nom:'Pastillas freno delanteras Brembo',marca:'Brembo',cat:'Frenos',stock:6,min:3,pcosto:18000,pventa:32000},
+    {id:'r4',cod:'FRN-002',nom:'Disco freno delantero',marca:'TRW',cat:'Frenos',stock:2,min:2,pcosto:28000,pventa:48000},
+    {id:'r5',cod:'MOT-001',nom:'Aceite 5W30 sintético 4L',marca:'Mobil 1',cat:'Motor',stock:15,min:8,pcosto:22000,pventa:38000},
+    {id:'r6',cod:'MOT-002',nom:'Bujías NGK (x4)',marca:'NGK',cat:'Motor',stock:10,min:4,pcosto:9500,pventa:16000},
+    {id:'r7',cod:'MOT-003',nom:'Correa dentada',marca:'Gates',cat:'Motor',stock:1,min:2,pcosto:35000,pventa:58000},
+    {id:'r8',cod:'SUS-001',nom:'Amortiguador trasero',marca:'Monroe',cat:'Suspensión',stock:4,min:2,pcosto:42000,pventa:72000},
+    {id:'r9',cod:'SUS-002',nom:'Rótula inferior',marca:'Moog',cat:'Suspensión',stock:2,min:2,pcosto:15000,pventa:26000},
+    {id:'r10',cod:'ELC-001',nom:'Batería 60Ah',marca:'Bosch',cat:'Electricidad',stock:3,min:2,pcosto:65000,pventa:105000},
+    {id:'r11',cod:'ELC-002',nom:'Alternador remanufacturado',marca:'Bosch',cat:'Electricidad',stock:1,min:1,pcosto:120000,pventa:190000},
+    {id:'r12',cod:'FLT-003',nom:'Filtro combustible',marca:'WIX',cat:'Filtros',stock:5,min:3,pcosto:4500,pventa:8500},
+    {id:'r13',cod:'MOT-004',nom:'Junta culata',marca:'Elring',cat:'Motor',stock:1,min:1,pcosto:55000,pventa:88000},
+    {id:'r14',cod:'FRN-003',nom:'Líquido de frenos DOT4 500ml',marca:'ATE',cat:'Frenos',stock:7,min:4,pcosto:3800,pventa:7000},
+    {id:'r15',cod:'SUS-003',nom:'Terminal dirección',marca:'TRW',cat:'Suspensión',stock:3,min:2,pcosto:12000,pventa:21000}
+  ];
+  // OTs
+  const hoy=fmtDate(new Date());
+  const ayer=fmtDate(new Date(Date.now()-86400000));
+  data.ots=[
+    {id:'ot1',num:'OT-0001',patente:'ABC123',cliente:'Carlos Mendoza',tel:'+56 9 7654 3210',tecId:'t1',marca:'Toyota',modelo:'Corolla',anio:2019,km:92000,motivo:'Mantención 90k km: aceite, filtros y revisión general',estado:'Entregado',fecha:ayer,fechaEnt:ayer,kmEnt:92000,
+     mano:[{desc:'Mantención completa 90k',precio:45000}],
+     partes:[{repId:'r1',nom:'Filtro de aceite Mann',qty:1,precio:6500},{repId:'r5',nom:'Aceite 5W30 sintético 4L',qty:1,precio:38000},{repId:'r12',nom:'Filtro combustible',qty:1,precio:8500}],
+     notas:'Todo OK, próxima mantención a los 102.000 km',metodoPago:'Efectivo'},
+    {id:'ot2',num:'OT-0002',patente:'DEF456',cliente:'Ana Torres',tel:'+56 9 6543 2109',tecId:'t2',marca:'Chevrolet',modelo:'Spark',anio:2021,km:34000,motivo:'Revisión frenos: chirrido al frenar',estado:'En Reparación',fecha:hoy,
+     mano:[{desc:'Diagnóstico sistema frenos',precio:15000},{desc:'Cambio pastillas y discos delanteros',precio:35000}],
+     partes:[{repId:'r3',nom:'Pastillas freno delanteras Brembo',qty:1,precio:32000},{repId:'r4',nom:'Disco freno delantero',qty:2,precio:48000}],
+     notas:''},
+    {id:'ot3',num:'OT-0003',patente:'GHI789',cliente:'Roberto Silva',tel:'+56 9 5432 1098',tecId:'t1',marca:'Nissan',modelo:'Sentra',anio:2018,km:105000,motivo:'Motor pierde potencia, humo azul en escape',estado:'Diagnóstico',fecha:hoy,
+     mano:[],partes:[],notas:''},
+    {id:'ot4',num:'OT-0004',patente:'JKL012',cliente:'Flota Expressa Ltda.',tel:'+56 2 2345 6789',tecId:'t2',marca:'Hyundai',modelo:'Accent',anio:2020,km:67000,motivo:'Batería descargada, alternador revisión',estado:'Esperando Repuesto',fecha:hoy,
+     mano:[{desc:'Diagnóstico eléctrico',precio:20000}],
+     partes:[{repId:'r10',nom:'Batería 60Ah',qty:1,precio:105000}],
+     notas:'Esperando alternador remanufacturado'},
+    {id:'ot5',num:'OT-0005',patente:'MNO345',cliente:'Carlos Mendoza',tel:'+56 9 7654 3210',tecId:'t1',marca:'Toyota',modelo:'Fortuner',anio:2022,km:28000,motivo:'Ruido en suspensión delantera izquierda',estado:'Listo',fecha:hoy,
+     mano:[{desc:'Revisión y cambio rótulas delanteras',precio:40000}],
+     partes:[{repId:'r9',nom:'Rótula inferior',qty:2,precio:26000}],
+     notas:'Listo para entrega'},
+    {id:'ot6',num:'OT-0006',patente:'PQR678',cliente:'Ana Torres',tel:'+56 9 6543 2109',tecId:'t2',marca:'Kia',modelo:'Picanto',anio:2023,km:12000,motivo:'Cambio bujías y revisión motor',estado:'Recibido',fecha:hoy,
+     mano:[],partes:[],notas:''},
+    {id:'ot7',num:'OT-0007',patente:'ABC123',cliente:'Carlos Mendoza',tel:'+56 9 7654 3210',tecId:'t1',marca:'Toyota',modelo:'Corolla',anio:2019,km:88000,motivo:'Cambio correa dentada preventivo',estado:'Entregado',fechaEnt:ayer,kmEnt:88000,
+     fecha:fmtDate(new Date(Date.now()-172800000)),
+     mano:[{desc:'Cambio correa dentada + tensor',precio:55000}],
+     partes:[{repId:'r7',nom:'Correa dentada',qty:1,precio:58000}],
+     notas:'',metodoPago:'Transferencia'},
+    {id:'ot8',num:'OT-0008',patente:'STU901',cliente:'Flota Expressa Ltda.',tel:'+56 2 2345 6789',tecId:'t2',marca:'Suzuki',modelo:'Swift',anio:2020,km:45000,motivo:'Servicio periódico 45k',estado:'En Reparación',fecha:hoy,
+     mano:[{desc:'Mantención periódica 45k',precio:38000}],
+     partes:[{repId:'r1',nom:'Filtro de aceite Mann',qty:1,precio:6500},{repId:'r5',nom:'Aceite 5W30 sintético 4L',qty:1,precio:38000}],
+     notas:''}
+  ];
+  // Caja
+  data.caja=[
+    {id:'gx1',tipo:'gasto',desc:'Insumos limpieza',monto:8500,fecha:hoy},
+    {id:'gx2',tipo:'gasto',desc:'Gas soldadura',monto:15000,fecha:hoy}
+  ];
+  return data;
+}
+
+function fmtDate(d){return d instanceof Date?d.toISOString().split('T')[0]:d;}
+function today(){return fmtDate(new Date());}
+function fmt$(n){return '$'+Number(n||0).toLocaleString('es-CL');}
+function uid(){return 'x'+Math.random().toString(36).slice(2,9);}
+
+// ===== NAVIGATION =====
+const PAGES=[
+  {id:'dash',label:'Dashboard',icon:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+  {id:'ots',label:'Órdenes de Trabajo',icon:'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'},
+  {id:'hist',label:'Historial',icon:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'},
+  {id:'reps',label:'Repuestos',icon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'},
+  {id:'ct',label:'Clientes & Técnicos',icon:'<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>'},
+  {id:'caja',label:'Caja del Día',icon:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>'}
+];
+
+function buildNav(){
+  const sn=document.getElementById('sidenav');
+  const bn=document.getElementById('bnav');
+  const bPages=['dash','ots','hist','reps','caja'];
+  sn.innerHTML=PAGES.map(p=>`<div class="nav-item${p.id==='dash'?' active':''}" onclick="gotoPage('${p.id}',this)" data-page="${p.id}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg>${p.label}</div>`).join('');
+  bn.innerHTML=bPages.map(id=>{const p=PAGES.find(x=>x.id===id);return`<div class="bnav-item${id==='dash'?' active':''}" onclick="gotoPage('${id}')" data-bpage="${id}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg><span>${p.label.split(' ')[0]}</span></div>`}).join('');
+}
+
+function gotoPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.bnav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const ni=document.querySelector(`[data-page="${id}"]`);if(ni)ni.classList.add('active');
+  const bi=document.querySelector(`[data-bpage="${id}"]`);if(bi)bi.classList.add('active');
+  renderPage(id);
+}
+
+function renderPage(id){
+  if(id==='dash') renderDash();
+  else if(id==='ots') renderOTs();
+  else if(id==='hist') searchHist();
+  else if(id==='reps') renderReps();
+  else if(id==='ct') renderCT();
+  else if(id==='caja') renderCaja();
+}
+
+// ===== STATUS HELPERS =====
+const ESTADOS=['Recibido','Diagnóstico','Esperando Repuesto','En Reparación','Listo','Entregado'];
+const ESTADO_CLS={'Recibido':'b-rcb','Diagnóstico':'b-diag','Esperando Repuesto':'b-rep','En Reparación':'b-work','Listo':'b-done','Entregado':'b-del'};
+function badgeEst(e){return`<span class="badge ${ESTADO_CLS[e]||'b-rcb'}">${e}</span>`;}
+
+// ===== DASHBOARD =====
+function renderDash(){
+  const activas=D.ots.filter(o=>o.estado!=='Entregado');
+  const entHoy=D.ots.filter(o=>o.estado==='Entregado'&&o.fechaEnt===today());
+  const ingHoy=entHoy.reduce((s,o)=>s+calcTotal(o),0);
+  const criticos=D.reps.filter(r=>r.stock<=r.min);
+  const g=document.getElementById('kpi-grid');
+  g.innerHTML=`
+    <div class="kpi"><div class="kpi-val">${activas.length}</div><div class="kpi-lbl">OTs Activas</div></div>
+    <div class="kpi"><div class="kpi-val">${entHoy.length}</div><div class="kpi-lbl">Entregadas Hoy</div></div>
+    <div class="kpi"><div class="kpi-val text-green" style="font-size:20px">${fmt$(ingHoy)}</div><div class="kpi-lbl">Ingresos del Día</div></div>
+    <div class="kpi"><div class="kpi-val text-red">${criticos.length}</div><div class="kpi-lbl">Repuestos Críticos</div></div>`;
+  document.getElementById('dash-ots').innerHTML=activas.length?activas.map(o=>`
+    <tr class="clickable" onclick="viewOT('${o.id}')">
+      <td><span class="text-pri fw-7">${o.num}</span></td>
+      <td>${o.cliente}</td><td>${o.patente}</td>
+      <td class="hide-m">${getTecNom(o.tecId)}</td>
+      <td>${badgeEst(o.estado)}</td>
+    </tr>`).join(''):`<tr><td colspan="5" class="empty">Sin OTs activas</td></tr>`;
+  document.getElementById('dash-reps').innerHTML=criticos.length?criticos.map(r=>`
+    <tr><td><span class="text-muted">${r.cod}</span></td><td>${r.nom}</td>
+    <td><span class="text-red fw-7">${r.stock}</span></td><td>${r.min}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">Sin alertas</td></tr>`;
+}
+
+// ===== OTs =====
+let otFilter='';
+function renderOTs(){
+  const filters=document.getElementById('ot-filters');
+  filters.innerHTML=`<button class="btn btn-sm ${!otFilter?'btn-pri':'btn-ghost'}" onclick="setOTFilter('')">Todas</button>`+
+    ESTADOS.map(e=>`<button class="btn btn-sm ${otFilter===e?'btn-pri':'btn-ghost'}" onclick="setOTFilter('${e}')">${e}</button>`).join('');
+  const q=(document.getElementById('ot-search')||{value:''}).value.toLowerCase();
+  let list=D.ots.filter(o=>{
+    if(otFilter&&o.estado!==otFilter) return false;
+    if(q&&!`${o.num}${o.cliente}${o.patente}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('ot-list').innerHTML=list.length?list.map(o=>`
+    <tr class="clickable" onclick="viewOT('${o.id}')">
+      <td><span class="text-pri fw-7">${o.num}</span></td>
+      <td>${o.cliente}</td><td>${o.patente}</td>
+      <td class="hide-m">${getTecNom(o.tecId)}</td>
+      <td>${badgeEst(o.estado)}</td><td class="text-muted">${o.fecha}</td>
+      <td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="editOT('${o.id}')">✏</button></td>
+    </tr>`).join(''):`<tr><td colspan="7" class="empty">Sin resultados</td></tr>`;
+}
+function setOTFilter(f){otFilter=f;renderOTs();}
+
+function calcTotal(ot){
+  const m=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0);
+  const p=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0);
+  return m+p;
+}
+function getTecNom(id){const t=D.tecnicos.find(x=>x.id===id);return t?t.nom:'—';}
+
+// Nueva OT
+let editOTId=null;
+function openNewOT(){
+  editOTId=null;
+  document.getElementById('mot-title').textContent='Nueva Orden de Trabajo';
+  ['ot-pat','ot-cli','ot-tel','ot-marca','ot-modelo','ot-anio','ot-km','ot-motivo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  fillTecSelect('ot-tec','');
+  openModal('modal-ot');
+}
+function editOT(id){
+  const ot=D.ots.find(o=>o.id===id);if(!ot)return;
+  editOTId=id;
+  document.getElementById('mot-title').textContent='Editar OT '+ot.num;
+  document.getElementById('ot-pat').value=ot.patente;
+  document.getElementById('ot-cli').value=ot.cliente;
+  document.getElementById('ot-tel').value=ot.tel||'';
+  document.getElementById('ot-marca').value=ot.marca||'';
+  document.getElementById('ot-modelo').value=ot.modelo||'';
+  document.getElementById('ot-anio').value=ot.anio||'';
+  document.getElementById('ot-km').value=ot.km||'';
+  document.getElementById('ot-motivo').value=ot.motivo||'';
+  fillTecSelect('ot-tec',ot.tecId||'');
+  openModal('modal-ot');
+}
+function fillTecSelect(selId,val){
+  const s=document.getElementById(selId);
+  s.innerHTML='<option value="">Sin asignar</option>'+D.tecnicos.map(t=>`<option value="${t.id}"${t.id===val?' selected':''}>${t.nom}</option>`).join('');
+}
+function autoFillVehicle(pat){
+  const ot=D.ots.find(o=>o.patente===pat);
+  if(ot){
+    if(!document.getElementById('ot-marca').value) document.getElementById('ot-marca').value=ot.marca||'';
+    if(!document.getElementById('ot-modelo').value) document.getElementById('ot-modelo').value=ot.modelo||'';
+    if(!document.getElementById('ot-anio').value) document.getElementById('ot-anio').value=ot.anio||'';
+    const cli=ot.cliente;
+    if(!document.getElementById('ot-cli').value) document.getElementById('ot-cli').value=cli;
+    if(!document.getElementById('ot-tel').value) document.getElementById('ot-tel').value=ot.tel||'';
+  }
+}
+function saveOT(){
+  const pat=document.getElementById('ot-pat').value.trim().toUpperCase();
+  const cli=document.getElementById('ot-cli').value.trim();
+  const motivo=document.getElementById('ot-motivo').value.trim();
+  if(!pat||!cli||!motivo){alert('Patente, cliente y motivo son requeridos.');return;}
+  if(editOTId){
+    const ot=D.ots.find(o=>o.id===editOTId);
+    Object.assign(ot,{patente:pat,cliente:cli,tel:document.getElementById('ot-tel').value,
+      tecId:document.getElementById('ot-tec').value,
+      marca:document.getElementById('ot-marca').value,
+      modelo:document.getElementById('ot-modelo').value,
+      anio:document.getElementById('ot-anio').value,
+      km:document.getElementById('ot-km').value,motivo});
+  } else {
+    const num='OT-'+String(D.nextOT).padStart(4,'0');D.nextOT++;
+    D.ots.push({id:uid(),num,patente:pat,cliente:cli,
+      tel:document.getElementById('ot-tel').value,
+      tecId:document.getElementById('ot-tec').value,
+      marca:document.getElementById('ot-marca').value,
+      modelo:document.getElementById('ot-modelo').value,
+      anio:document.getElementById('ot-anio').value,
+      km:document.getElementById('ot-km').value,
+      motivo,estado:'Recibido',fecha:today(),mano:[],partes:[],notas:''});
+  }
+  save();closeModal('modal-ot');renderOTs();renderDash();
+}
+
+// View OT
+let curOTId=null;
+function viewOT(id){
+  curOTId=id;
+  const ot=D.ots.find(o=>o.id===id);if(!ot)return;
+  document.getElementById('motv-title').textContent=ot.num+' — '+ot.patente;
+  renderOTView(ot);
+  openModal('modal-otv');
+}
+function renderOTView(ot){
+  const total=calcTotal(ot);
+  const manoTotal=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0);
+  const partesTotal=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0);
+  const entregado=ot.estado==='Entregado';
+  document.getElementById('otv-body').innerHTML=`
+    <div class="ot-section">
+      <div class="ot-section-title">Información del Vehículo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
+        <div><span class="text-muted">Cliente:</span> <b>${ot.cliente}</b></div>
+        <div><span class="text-muted">Patente:</span> <b>${ot.patente}</b></div>
+        <div><span class="text-muted">Vehículo:</span> ${ot.marca||''} ${ot.modelo||''} ${ot.anio||''}</div>
+        <div><span class="text-muted">Km:</span> ${ot.km?Number(ot.km).toLocaleString('es-CL')+' km':'—'}</div>
+        <div><span class="text-muted">Técnico:</span> ${getTecNom(ot.tecId)}</div>
+        <div><span class="text-muted">Fecha:</span> ${ot.fecha}</div>
+        <div class="full" style="grid-column:1/-1"><span class="text-muted">Motivo:</span> ${ot.motivo}</div>
+      </div>
+    </div>
+    <div class="ot-section no-print">
+      <div class="ot-section-title">Estado</div>
+      <div class="status-bar">${ESTADOS.map(e=>`<div class="st-step${ot.estado===e?' active':''}" onclick="changeEstado('${ot.id}','${e}')">${e}</div>`).join('')}</div>
+    </div>
+    <div class="ot-section">
+      <div class="ot-section-title">Mano de Obra</div>
+      <table><thead><tr><th>Descripción</th><th>Precio</th><th class="no-print"></th></tr></thead>
+      <tbody>${(ot.mano||[]).map((m,i)=>`<tr><td>${m.desc}</td><td>${fmt$(m.precio)}</td>
+        <td class="no-print"><button class="btn btn-red btn-sm" onclick="removeItem('mano',${i})">✕</button></td></tr>`).join('')||'<tr><td colspan="3" class="empty" style="padding:8px">Sin mano de obra</td></tr>'}
+      </tbody></table>
+      ${!entregado?`<div class="inline-form mt-8">
+        <input id="mo-desc" placeholder="Descripción trabajo">
+        <input id="mo-precio" type="number" placeholder="Precio" style="width:120px">
+        <button class="btn btn-pri btn-sm" onclick="addMano()">+</button>
+      </div>`:''}
+    </div>
+    <div class="ot-section">
+      <div class="ot-section-title">Repuestos Utilizados</div>
+      <table><thead><tr><th>Repuesto</th><th>Cant</th><th>Precio</th><th class="no-print"></th></tr></thead>
+      <tbody>${(ot.partes||[]).map((p,i)=>`<tr><td>${p.nom}</td><td>${p.qty}</td><td>${fmt$(p.precio*p.qty)}</td>
+        <td class="no-print"><button class="btn btn-red btn-sm" onclick="removeItem('partes',${i})">✕</button></td></tr>`).join('')||'<tr><td colspan="4" class="empty" style="padding:8px">Sin repuestos</td></tr>'}
+      </tbody></table>
+      ${!entregado?`<div class="inline-form mt-8">
+        <select id="rep-sel" style="flex:2">${D.reps.map(r=>`<option value="${r.id}">${r.nom} (Stock:${r.stock})</option>`).join('')}</select>
+        <input id="rep-qty" type="number" value="1" min="1" style="width:60px">
+        <button class="btn btn-pri btn-sm" onclick="addParte()">+</button>
+      </div>`:''}
+    </div>
+    <div class="ot-section">
+      <div class="totals-row"><span class="text-muted">Mano de obra</span><span>${fmt$(manoTotal)}</span></div>
+      <div class="totals-row"><span class="text-muted">Repuestos</span><span>${fmt$(partesTotal)}</span></div>
+      <div class="totals-row"><span class="fw-7">TOTAL</span><span class="total-final">${fmt$(total)}</span></div>
+    </div>
+    <div class="ot-section">
+      <div class="ot-section-title">Notas</div>
+      ${!entregado?`<textarea id="ot-notas" rows="2" onchange="saveNota()">${ot.notas||''}</textarea>`:`<p class="text-muted">${ot.notas||'Sin notas'}</p>`}
+    </div>
+    ${entregado?`<div class="ot-section"><div class="alert" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green)">✓ Entregado el ${ot.fechaEnt||''} · Pago: ${ot.metodoPago||'—'}</div></div>`:''}
+    ${ot.estado==='Listo'&&!entregado?`<div class="no-print"><button class="btn btn-pri w-full" onclick="openPago('${ot.id}')">💰 Registrar Entrega y Pago</button></div>`:''}`;
+}
+
+function changeEstado(id,est){
+  const ot=D.ots.find(o=>o.id===id);if(!ot)return;
+  if(est==='Entregado'){openPago(id);return;}
+  ot.estado=est;save();renderOTView(ot);renderDash();
+}
+function addMano(){
+  const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  const desc=document.getElementById('mo-desc').value.trim();
+  const precio=Number(document.getElementById('mo-precio').value);
+  if(!desc||!precio){alert('Descripción y precio requeridos');return;}
+  ot.mano.push({desc,precio});save();renderOTView(ot);
+}
+function addParte(){
+  const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  const repId=document.getElementById('rep-sel').value;
+  const qty=Number(document.getElementById('rep-qty').value)||1;
+  const rep=D.reps.find(r=>r.id===repId);if(!rep)return;
+  if(rep.stock<qty){alert(`Stock insuficiente. Disponible: ${rep.stock}`);return;}
+  rep.stock-=qty;
+  ot.partes.push({repId,nom:rep.nom,qty,precio:rep.pventa});
+  save();renderOTView(ot);renderReps();
+}
+function removeItem(tipo,idx){
+  const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  if(tipo==='partes'){
+    const p=ot.partes[idx];const rep=D.reps.find(r=>r.id===p.repId);
+    if(rep) rep.stock+=Number(p.qty);
+  }
+  ot[tipo].splice(idx,1);save();renderOTView(ot);
+}
+function saveNota(){
+  const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  ot.notas=document.getElementById('ot-notas').value;save();
+}
+function printOT(){window.print();}
+
+// Pago
+function openPago(id){
+  curOTId=id;
+  const ot=D.ots.find(o=>o.id===id);if(!ot)return;
+  const total=calcTotal(ot);
+  document.getElementById('pago-body').innerHTML=`
+    <div class="mb-12"><span class="text-muted">Total a cobrar:</span> <span class="total-final">${fmt$(total)}</span></div>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      <div class="form-group"><label>Método de Pago</label>
+        <select id="pago-metodo"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta Corriente</option></select>
+      </div>
+      <div class="form-group"><label>Km al entregar</label><input id="pago-km" type="number" value="${ot.km||''}" placeholder="Km actuales"></div>
+    </div>`;
+  openModal('modal-pago');
+}
+function confirmarPago(){
+  const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  ot.estado='Entregado';
+  ot.fechaEnt=today();
+  ot.metodoPago=document.getElementById('pago-metodo').value;
+  ot.kmEnt=document.getElementById('pago-km').value;
+  // registrar en caja
+  D.caja.push({id:uid(),tipo:'ingreso',desc:`${ot.num} — ${ot.cliente}`,
+    mano:(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0),
+    partes:(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0),
+    metodo:ot.metodoPago,fecha:today()});
+  save();closeModal('modal-pago');renderOTView(ot);renderDash();
+}
+
+// ===== HISTORIAL =====
+function searchHist(){
+  const q=(document.getElementById('hist-search')||{value:''}).value.trim().toUpperCase();
+  const el=document.getElementById('hist-results');
+  if(!q){el.innerHTML='<div class="empty">Ingrese una patente para buscar</div>';return;}
+  const ots=D.ots.filter(o=>o.patente.includes(q)).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  if(!ots.length){el.innerHTML='<div class="empty">No se encontraron registros para "'+q+'"</div>';return;}
+  const last=ots[0];
+  el.innerHTML=`<div class="card mb-12">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div><div class="text-muted text-sm">Patente</div><div class="fw-7 text-pri" style="font-size:18px">${q}</div></div>
+      <div><div class="text-muted text-sm">Vehículo</div><div class="fw-7">${last.marca||''} ${last.modelo||''} ${last.anio||''}</div></div>
+      <div><div class="text-muted text-sm">Último km reg.</div><div class="fw-7">${last.kmEnt?Number(last.kmEnt).toLocaleString('es-CL')+' km':last.km?Number(last.km).toLocaleString('es-CL')+' km':'—'}</div></div>
+      <div><div class="text-muted text-sm">Propietario</div><div>${last.cliente}</div></div>
+      <div><div class="text-muted text-sm">Última visita</div><div>${last.fecha}</div></div>
+      <div><div class="text-muted text-sm">Total visitas</div><div>${ots.length}</div></div>
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table><thead><tr><th>N° OT</th><th>Fecha</th><th>Motivo</th><th>Km</th><th>Estado</th><th>Total</th></tr></thead>
+    <tbody>${ots.map(o=>`<tr class="clickable" onclick="viewOT('${o.id}')">
+      <td class="text-pri fw-7">${o.num}</td><td>${o.fecha}</td><td>${o.motivo}</td>
+      <td>${o.km?Number(o.km).toLocaleString('es-CL')+' km':'—'}</td>
+      <td>${badgeEst(o.estado)}</td><td>${fmt$(calcTotal(o))}</td>
+    </tr>`).join('')}</tbody></table>
+  </div>`;
+}
+
+// ===== REPUESTOS =====
+let editRepId=null;
+function renderReps(){
+  const alerts=D.reps.filter(r=>r.stock<=r.min);
+  document.getElementById('rep-alerts').innerHTML=alerts.length?`<div class="alert alert-red mb-12">⚠ ${alerts.length} repuesto(s) en stock crítico: ${alerts.map(r=>r.nom).join(', ')}</div>`:'';
+  const q=(document.getElementById('rep-search')||{value:''}).value.toLowerCase();
+  const list=D.reps.filter(r=>!q||`${r.cod}${r.nom}${r.cat}`.toLowerCase().includes(q));
+  document.getElementById('rep-list').innerHTML=list.length?list.map(r=>`<tr>
+    <td class="text-muted text-sm">${r.cod}</td><td>${r.nom}<br><span class="text-muted text-sm">${r.marca}</span></td>
+    <td class="hide-m"><span class="tag">${r.cat}</span></td>
+    <td><span class="${r.stock<=r.min?'text-red fw-7':''}">${r.stock}</span></td>
+    <td class="text-muted">${r.min}</td>
+    <td class="hide-m text-muted">${fmt$(r.pcosto)}</td>
+    <td>${fmt$(r.pventa)}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick="openEntrada('${r.id}')">+stock</button>
+      <button class="btn btn-ghost btn-sm" onclick="openRepModal('${r.id}')">✏</button>
+      <button class="btn btn-red btn-sm" onclick="delRep('${r.id}')">✕</button>
+    </td>
+  </tr>`).join(''):`<tr><td colspan="8" class="empty">Sin repuestos</td></tr>`;
+}
+function openRepModal(id){
+  editRepId=id||null;
+  document.getElementById('mrep-title').textContent=id?'Editar Repuesto':'Nuevo Repuesto';
+  const rep=id?D.reps.find(r=>r.id===id):null;
+  ['rep-cod','rep-nom','rep-marca','rep-stock','rep-min','rep-pcosto','rep-pventa'].forEach(fid=>{
+    const field=fid.replace('rep-','');
+    document.getElementById(fid).value=rep?rep[field==='cod'?'cod':field==='nom'?'nom':field==='pcosto'?'pcosto':field==='pventa'?'pventa':field]||'':'';
+  });
+  if(rep) document.getElementById('rep-cat').value=rep.cat||'Motor';
+  openModal('modal-rep');
+}
+function saveRep(){
+  const cod=document.getElementById('rep-cod').value.trim();
+  const nom=document.getElementById('rep-nom').value.trim();
+  if(!cod||!nom){alert('Código y nombre requeridos');return;}
+  const obj={cod,nom,marca:document.getElementById('rep-marca').value,
+    cat:document.getElementById('rep-cat').value,
+    stock:Number(document.getElementById('rep-stock').value)||0,
+    min:Number(document.getElementById('rep-min').value)||0,
+    pcosto:Number(document.getElementById('rep-pcosto').value)||0,
+    pventa:Number(document.getElementById('rep-pventa').value)||0};
+  if(editRepId){Object.assign(D.reps.find(r=>r.id===editRepId),obj);}
+  else{D.reps.push({id:uid(),...obj});}
+  save();closeModal('modal-rep');renderReps();
+}
+function delRep(id){if(!confirm('¿Eliminar repuesto?'))return;D.reps=D.reps.filter(r=>r.id!==id);save();renderReps();}
+
+let entRepId=null;
+function openEntrada(id){
+  entRepId=id;const rep=D.reps.find(r=>r.id===id);
+  document.getElementById('ent-nom').value=rep.nom;
+  document.getElementById('ent-qty').value=1;
+  openModal('modal-entrada');
+}
+function confirmarEntrada(){
+  const rep=D.reps.find(r=>r.id===entRepId);if(!rep)return;
+  rep.stock+=Number(document.getElementById('ent-qty').value)||1;
+  save();closeModal('modal-entrada');renderReps();
+}
+
+// ===== CLIENTES & TÉCNICOS =====
+let editCliId=null,editTecId=null;
+function switchCT(which,el){
+  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ct-cli').style.display=which==='cli'?'block':'none';
+  document.getElementById('ct-tec').style.display=which==='tec'?'block':'none';
+}
+function renderCT(){renderCli();renderTec();}
+function renderCli(){
+  document.getElementById('cli-count').textContent=`${D.clientes.length} clientes`;
+  document.getElementById('cli-list').innerHTML=D.clientes.map(c=>{
+    const ots=D.ots.filter(o=>o.cliente===c.nom);
+    const pats=[...new Set(ots.map(o=>o.patente))];
+    return`<div class="card">
+      <div class="flex justify-between items-center mb-4">
+        <div><span class="fw-7">${c.nom}</span> <span class="text-muted text-sm">${c.rut||''}</span></div>
+        <div class="flex gap-4">
+          ${c.cc?`<span class="badge badge-red">CC: ${fmt$(c.cc)}</span>`:''}
+          <button class="btn btn-ghost btn-sm" onclick="openCliModal('${c.id}')">✏</button>
+          <button class="btn btn-red btn-sm" onclick="delCli('${c.id}')">✕</button>
+        </div>
+      </div>
+      <div class="flex gap-8" style="flex-wrap:wrap;font-size:12px;color:var(--muted)">
+        <span>📞 ${c.tel||'—'}</span><span>✉ ${c.email||'—'}</span>
+        <span>🚗 ${pats.length?pats.map(p=>`<span class="tag">${p}</span>`).join(''):'sin vehículos'}</span>
+        <span>📋 ${ots.length} OTs</span>
+      </div>
+    </div>`;
+  }).join('')||'<div class="empty">Sin clientes</div>';
+}
+function openCliModal(id){
+  editCliId=id||null;
+  document.getElementById('mcli-title').textContent=id?'Editar Cliente':'Nuevo Cliente';
+  const c=id?D.clientes.find(x=>x.id===id):null;
+  document.getElementById('cli-nom').value=c?c.nom:'';
+  document.getElementById('cli-tel').value=c?c.tel:'';
+  document.getElementById('cli-email').value=c?c.email:'';
+  document.getElementById('cli-rut').value=c?c.rut:'';
+  document.getElementById('cli-cc').value=c?c.cc:0;
+  openModal('modal-cli');
+}
+function saveCli(){
+  const nom=document.getElementById('cli-nom').value.trim();
+  if(!nom){alert('Nombre requerido');return;}
+  const obj={nom,tel:document.getElementById('cli-tel').value,email:document.getElementById('cli-email').value,
+    rut:document.getElementById('cli-rut').value,cc:Number(document.getElementById('cli-cc').value)||0};
+  if(editCliId){Object.assign(D.clientes.find(c=>c.id===editCliId),obj);}
+  else{D.clientes.push({id:uid(),...obj});}
+  save();closeModal('modal-cli');renderCli();
+}
+function delCli(id){if(!confirm('¿Eliminar cliente?'))return;D.clientes=D.clientes.filter(c=>c.id!==id);save();renderCli();}
+
+function renderTec(){
+  document.getElementById('tec-count').textContent=`${D.tecnicos.length} técnicos`;
+  document.getElementById('tec-list').innerHTML=D.tecnicos.map(t=>{
+    const ots=D.ots.filter(o=>o.tecId===t.id&&o.estado==='Entregado'&&o.fechaEnt===today());
+    const totalMes=D.ots.filter(o=>o.tecId===t.id&&o.estado==='Entregado').reduce((s,o)=>s+calcTotal(o),0);
+    const comision=Math.round(totalMes*(t.com/100));
+    return`<div class="card">
+      <div class="flex justify-between items-center mb-4">
+        <div><span class="fw-7">${t.nom}</span> <span class="tag">${t.esp}</span></div>
+        <div class="flex gap-4">
+          <button class="btn btn-ghost btn-sm" onclick="openTecModal('${t.id}')">✏</button>
+          <button class="btn btn-red btn-sm" onclick="delTec('${t.id}')">✕</button>
+        </div>
+      </div>
+      <div class="flex gap-8" style="flex-wrap:wrap;font-size:12px;color:var(--muted)">
+        <span>📞 ${t.tel||'—'}</span>
+        <span>Comisión: <b class="text-pri">${t.com}%</b></span>
+        <span>OTs hoy: <b>${ots.length}</b></span>
+        <span>Facturado acum.: <b>${fmt$(totalMes)}</b></span>
+        <span>Liquidación: <b class="text-green">${fmt$(comision)}</b></span>
+      </div>
+    </div>`;
+  }).join('')||'<div class="empty">Sin técnicos</div>';
+}
+function openTecModal(id){
+  editTecId=id||null;
+  document.getElementById('mtec-title').textContent=id?'Editar Técnico':'Nuevo Técnico';
+  const t=id?D.tecnicos.find(x=>x.id===id):null;
+  document.getElementById('tec-nom').value=t?t.nom:'';
+  document.getElementById('tec-esp').value=t?t.esp:'';
+  document.getElementById('tec-tel').value=t?t.tel:'';
+  document.getElementById('tec-com').value=t?t.com:10;
+  openModal('modal-tec');
+}
+function saveTec(){
+  const nom=document.getElementById('tec-nom').value.trim();
+  if(!nom){alert('Nombre requerido');return;}
+  const obj={nom,esp:document.getElementById('tec-esp').value,tel:document.getElementById('tec-tel').value,
+    com:Number(document.getElementById('tec-com').value)||0};
+  if(editTecId){Object.assign(D.tecnicos.find(t=>t.id===editTecId),obj);}
+  else{D.tecnicos.push({id:uid(),...obj});}
+  save();closeModal('modal-tec');renderTec();
+}
+function delTec(id){if(!confirm('¿Eliminar técnico?'))return;D.tecnicos=D.tecnicos.filter(t=>t.id!==id);save();renderTec();}
+
+// ===== CAJA =====
+function renderCaja(){
+  const hoy=today();
+  const pagos=D.caja.filter(x=>x.tipo==='ingreso'&&x.fecha===hoy);
+  const gastos=D.caja.filter(x=>x.tipo==='gasto'&&x.fecha===hoy);
+  const totalMano=pagos.reduce((s,x)=>s+Number(x.mano||0),0);
+  const totalPartes=pagos.reduce((s,x)=>s+Number(x.partes||0),0);
+  const totalIng=totalMano+totalPartes;
+  const totalGastos=gastos.reduce((s,x)=>s+Number(x.monto||0),0);
+  const neto=totalIng-totalGastos;
+  const metodos=['Efectivo','Transferencia','Débito','Crédito','Cuenta Corriente'];
+  const porMetodo=metodos.map(m=>({m,v:pagos.filter(p=>p.metodo===m).reduce((s,p)=>s+Number(p.mano||0)+Number(p.partes||0),0)})).filter(x=>x.v>0);
+  document.getElementById('caja-content').innerHTML=`
+    <div class="caja-grid">
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Resumen del Día</span><span class="text-muted text-sm">${hoy}</span></div>
+          <div class="totals-row"><span class="text-muted">Mano de obra</span><span>${fmt$(totalMano)}</span></div>
+          <div class="totals-row"><span class="text-muted">Repuestos</span><span>${fmt$(totalPartes)}</span></div>
+          <div class="totals-row"><span class="text-muted">Total Ingresos</span><span class="text-green fw-7">${fmt$(totalIng)}</span></div>
+          <div class="totals-row"><span class="text-muted">Total Gastos</span><span class="text-red">${fmt$(totalGastos)}</span></div>
+          <div class="totals-row"><span class="fw-7">NETO</span><span class="total-final">${fmt$(neto)}</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Por Método de Pago</span></div>
+          ${porMetodo.length?porMetodo.map(x=>`<div class="metodo-row"><span>${x.m}</span><span class="fw-7">${fmt$(x.v)}</span></div>`).join(''):'<div class="empty" style="padding:12px">Sin ingresos hoy</div>'}
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Ingresos</span></div>
+          <table><thead><tr><th>OT</th><th>Método</th><th>Monto</th></tr></thead>
+          <tbody>${pagos.length?pagos.map(p=>`<tr><td>${p.desc}</td><td>${p.metodo}</td><td class="text-green">${fmt$(Number(p.mano||0)+Number(p.partes||0))}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">Sin ingresos</td></tr>'}
+          </tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Gastos</span>
+            <button class="btn btn-ghost btn-sm" onclick="addGasto()">+ Gasto</button>
+          </div>
+          <table><thead><tr><th>Descripción</th><th>Monto</th><th></th></tr></thead>
+          <tbody>${gastos.length?gastos.map(g=>`<tr><td>${g.desc}</td><td class="text-red">${fmt$(g.monto)}</td>
+            <td><button class="btn btn-red btn-sm" onclick="delGasto('${g.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="3" class="empty">Sin gastos</td></tr>'}
+          </tbody></table>
+        </div>
+      </div>
+    </div>`;
+}
+function addGasto(){
+  const desc=prompt('Descripción del gasto:');if(!desc)return;
+  const monto=Number(prompt('Monto:'));if(!monto)return;
+  D.caja.push({id:uid(),tipo:'gasto',desc,monto,fecha:today()});
+  save();renderCaja();
+}
+function delGasto(id){D.caja=D.caja.filter(x=>x.id!==id);save();renderCaja();}
+
+// ===== MODAL HELPERS =====
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-bg'))closeModal(e.target.id);});
+
+// ===== INIT =====
+buildNav();
+renderDash();
+</script>
+</body>
+</html>
