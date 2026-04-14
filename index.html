@@ -2,11 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aura Auto</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<title>Aura Auto — Sistema de Gestión para Talleres Mecánicos | Yusta Labs</title>
+<meta name="description" content="Aura Auto: sistema de gestión integral para talleres mecánicos. Administrá órdenes de trabajo, repuestos, vehículos, técnicos y caja. Demo por Yusta Labs.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#050810;--surf:#0C1220;--card:#131B2E;--pri:#0EA5E9;--acc:#64748B;--bdr:#1E293B;--txt:#E2E8F0;--muted:#94A3B8;--green:#22C55E;--yellow:#F59E0B;--red:#EF4444;--orange:#F97316}
-body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',sans-serif;font-size:14px;min-height:100vh;display:flex}
+:root{--bg:#0A0A0A;--surf:#111318;--card:#181D26;--pri:#E11D48;--acc:#64748B;--bdr:#252D3D;--txt:#F1F5F9;--muted:#64748B;--green:#22C55E;--yellow:#F59E0B;--red:#E11D48;--orange:#F97316}
+body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh;display:flex}
 a{color:inherit;text-decoration:none}
 /* Layout */
 #sidebar{width:220px;min-height:100vh;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:50}
@@ -14,12 +17,12 @@ a{color:inherit;text-decoration:none}
 .logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--bdr)}
 .logo-sq{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0EA5E9,#64748B);display:grid;place-items:center;flex-shrink:0}
 .logo-sq svg{width:20px;height:20px}
-.logo-name{font-weight:700;font-size:15px;letter-spacing:.3px}
+.logo-name{font-weight:700;font-size:15px;letter-spacing:.3px;font-family:'Rajdhani',sans-serif;}
 .logo-sub{font-size:10px;color:var(--muted)}
 nav{flex:1;padding:12px 8px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--muted);transition:all .15s;margin-bottom:2px;font-size:13px}
 .nav-item:hover{background:var(--card);color:var(--txt)}
-.nav-item.active{background:rgba(14,165,233,.15);color:var(--pri)}
+.nav-item.active{background:rgba(225,29,72,.15);color:var(--pri)}
 .nav-item svg{width:16px;height:16px;flex-shrink:0}
 /* Mobile */
 #topbar{display:none;position:fixed;top:0;left:0;right:0;height:52px;background:var(--surf);border-bottom:1px solid var(--bdr);align-items:center;padding:0 16px;gap:12px;z-index:50}
@@ -30,10 +33,10 @@ nav{flex:1;padding:12px 8px}
 .bnav-item svg{width:18px;height:18px}
 /* Cards & Grid */
 .page{display:none}.page.active{display:block}
-.page-title{font-size:18px;font-weight:700;margin-bottom:20px}
+.page-title{font-size:22px;font-weight:700;margin-bottom:20px;font-family:'Rajdhani',sans-serif;letter-spacing:0.05em;text-transform:uppercase;}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 .kpi{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:16px}
-.kpi-val{font-size:26px;font-weight:700;color:var(--pri)}
+.kpi-val{font-size:28px;font-weight:700;color:var(--pri);font-family:'Rajdhani',sans-serif;}
 .kpi-lbl{font-size:11px;color:var(--muted);margin-top:2px}
 .card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:16px;margin-bottom:16px}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
@@ -56,7 +59,7 @@ tr.clickable:hover td{background:rgba(14,165,233,.05)}
 .badge-red{background:rgba(239,68,68,.15);color:#EF4444}
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s}
-.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:#0284C7}
+.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:#BE123C}
 .btn-sec{background:var(--bdr);color:var(--txt)}.btn-sec:hover{background:#2D3F55}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--bdr)}.btn-ghost:hover{color:var(--txt);border-color:var(--acc)}
 .btn-red{background:rgba(239,68,68,.15);color:#EF4444}.btn-red:hover{background:rgba(239,68,68,.25)}
@@ -128,6 +131,7 @@ textarea{resize:vertical;min-height:70px}
 .w-full{width:100%}.mt-8{margin-top:8px}.mt-12{margin-top:12px}
 .empty{text-align:center;padding:32px;color:var(--muted)}
 .tag{display:inline-block;background:rgba(14,165,233,.1);color:var(--pri);border-radius:4px;padding:1px 6px;font-size:11px;margin:1px}
+.notif-badge{background:#E11D48;color:#fff;font-size:10px;border-radius:999px;padding:2px 6px;margin-left:auto;font-weight:700;}
 </style>
 </head>
 <body>
@@ -140,11 +144,11 @@ textarea{resize:vertical;min-height:70px}
         <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
       </svg>
     </div>
-    <div><div class="logo-name">Aura Auto</div><div class="logo-sub">Taller Mecánico</div></div>
+    <div><div class="logo-name">Aura Auto</div><div class="logo-sub">by Yusta Labs</div></div>
   </div>
   <nav id="sidenav"></nav>
   <div style="padding:12px 16px;border-top:1px solid var(--bdr)">
-    <div class="text-sm text-muted">v1.0 · Demo</div>
+    <div class="text-sm text-muted">v1.0 · <a href="https://yustalabs-web.vercel.app" target="_blank" style="color:inherit;text-decoration:none;opacity:.8" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.8'">Powered by Yusta Labs ↗</a></div>
   </div>
 </div>
 
@@ -166,7 +170,12 @@ textarea{resize:vertical;min-height:70px}
   <!-- DASHBOARD -->
   <div class="page active" id="page-dash">
     <div class="page-title">Dashboard</div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <button onclick="gotoPage('ots')" style="flex:1;min-width:150px;padding:13px 16px;font-size:14px;font-weight:700;background:var(--pri);color:#fff;border:none;border-radius:10px;cursor:pointer;letter-spacing:.02em;font-family:'Rajdhani',sans-serif;text-transform:uppercase;">🔧 Nueva Orden de Trabajo</button>
+      <button onclick="gotoPage('caja')" style="flex:1;min-width:150px;padding:13px 16px;font-size:14px;font-weight:700;background:var(--green);color:#fff;border:none;border-radius:10px;cursor:pointer;letter-spacing:.02em;font-family:'Rajdhani',sans-serif;text-transform:uppercase;">💰 Ver Caja del Día</button>
+    </div>
     <div class="kpi-grid" id="kpi-grid"></div>
+    <div id="alertas-panel" style="margin-bottom:16px"></div>
     <div class="card">
       <div class="card-header"><span class="card-title">OTs Activas</span></div>
       <table><thead><tr><th>N°</th><th>Cliente</th><th>Patente</th><th class="hide-m">Técnico</th><th>Estado</th></tr></thead>
@@ -249,6 +258,7 @@ textarea{resize:vertical;min-height:70px}
   <!-- CAJA -->
   <div class="page" id="page-caja">
     <div class="page-title">Caja del Día</div>
+    <button class="btn btn-ghost" style="margin-bottom:16px" onclick="reporteMensual()">📊 Reporte Mensual</button>
     <div id="caja-content"></div>
   </div>
 </div>
@@ -286,7 +296,7 @@ textarea{resize:vertical;min-height:70px}
     <div class="modal-header">
       <div class="modal-title" id="motv-title">OT-0001</div>
       <div class="flex gap-8">
-        <button class="btn btn-ghost btn-sm no-print" onclick="printOT()">🖨 Imprimir</button>
+        <button class="btn btn-ghost btn-sm no-print" onclick="printOT()">🖨️ Imprimir OT</button>
         <button class="modal-close" onclick="closeModal('modal-otv')">×</button>
       </div>
     </div>
@@ -505,6 +515,7 @@ function buildNav(){
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg>${p.label}</div>`).join('');
   bn.innerHTML=bPages.map(id=>{const p=PAGES.find(x=>x.id===id);return`<div class="bnav-item${id==='dash'?' active':''}" onclick="gotoPage('${id}')" data-bpage="${id}">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg><span>${p.label.split(' ')[0]}</span></div>`}).join('');
+  renderNotifBadge();
 }
 
 function gotoPage(id,el){
@@ -536,7 +547,7 @@ function renderDash(){
   const activas=D.ots.filter(o=>o.estado!=='Entregado');
   const entHoy=D.ots.filter(o=>o.estado==='Entregado'&&o.fechaEnt===today());
   const ingHoy=entHoy.reduce((s,o)=>s+calcTotal(o),0);
-  const criticos=D.reps.filter(r=>r.stock<=r.min);
+  const criticos=D.reps.filter(r=>r.stock<=(r.stockMin!=null?r.stockMin:r.min!=null?r.min:2));
   const g=document.getElementById('kpi-grid');
   g.innerHTML=`
     <div class="kpi"><div class="kpi-val">${activas.length}</div><div class="kpi-lbl">OTs Activas</div></div>
@@ -553,6 +564,7 @@ function renderDash(){
   document.getElementById('dash-reps').innerHTML=criticos.length?criticos.map(r=>`
     <tr><td><span class="text-muted">${r.cod}</span></td><td>${r.nom}</td>
     <td><span class="text-red fw-7">${r.stock}</span></td><td>${r.min}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">Sin alertas</td></tr>`;
+  renderNotifBadge();
 }
 
 // ===== OTs =====
@@ -573,7 +585,7 @@ function renderOTs(){
       <td>${o.cliente}</td><td>${o.patente}</td>
       <td class="hide-m">${getTecNom(o.tecId)}</td>
       <td>${badgeEst(o.estado)}</td><td class="text-muted">${o.fecha}</td>
-      <td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="editOT('${o.id}')">✏</button></td>
+      <td onclick="event.stopPropagation()" style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="editOT('${o.id}')">✏</button> <button class="btn btn-ghost btn-sm" onclick="curOTId='${o.id}';printOT()">🖨️</button></td>
     </tr>`).join(''):`<tr><td colspan="7" class="empty">Sin resultados</td></tr>`;
 }
 function setOTFilter(f){otFilter=f;renderOTs();}
@@ -611,7 +623,11 @@ function editOT(id){
 }
 function fillTecSelect(selId,val){
   const s=document.getElementById(selId);
-  s.innerHTML='<option value="">Sin asignar</option>'+D.tecnicos.map(t=>`<option value="${t.id}"${t.id===val?' selected':''}>${t.nom}</option>`).join('');
+  s.innerHTML='<option value="">Sin asignar</option>'+D.tecnicos.map(t=>{
+    const openOTs=D.ots.filter(o=>o.tecId===t.id&&o.estado!=='Entregado').length;
+    const label=`${t.nom} (${openOTs} OT${openOTs!==1?'s':''} abiertas)`;
+    return`<option value="${t.id}"${t.id===val?' selected':''}>${label}</option>`;
+  }).join('');
 }
 function autoFillVehicle(pat){
   const ot=D.ots.find(o=>o.patente===pat);
@@ -736,7 +752,10 @@ function addParte(){
   const repId=document.getElementById('rep-sel').value;
   const qty=Number(document.getElementById('rep-qty').value)||1;
   const rep=D.reps.find(r=>r.id===repId);if(!rep)return;
-  if(rep.stock<qty){alert(`Stock insuficiente. Disponible: ${rep.stock}`);return;}
+  if(rep.stock<qty){
+    showToast(`⚠ Stock insuficiente para "${rep.nom}". Disponible: ${rep.stock}, solicitado: ${qty}.`,'warn');
+    return;
+  }
   rep.stock-=qty;
   ot.partes.push({repId,nom:rep.nom,qty,precio:rep.pventa});
   save();renderOTView(ot);renderReps();
@@ -753,7 +772,65 @@ function saveNota(){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
   ot.notas=document.getElementById('ot-notas').value;save();
 }
-function printOT(){window.print();}
+function printOT(){
+  const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  const total=calcTotal(ot);
+  const manoTotal=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0);
+  const partesTotal=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0);
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${ot.num}</title>
+  <style>
+    body{font-family:Arial,sans-serif;font-size:12px;color:#111;padding:24px;max-width:720px;margin:0 auto}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #E11D48;padding-bottom:12px;margin-bottom:16px}
+    .logo{font-size:20px;font-weight:800;color:#E11D48;letter-spacing:1px}
+    .sub{font-size:10px;color:#666}
+    .ot-num{font-size:18px;font-weight:700}
+    table{width:100%;border-collapse:collapse;margin:10px 0}
+    th{background:#f0f0f0;padding:7px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+    td{padding:7px 10px;border-bottom:1px solid #e5e5e5;font-size:12px}
+    tr:last-child td{border-bottom:none}
+    .totals{margin-top:10px;border-top:2px solid #333}
+    .tot-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+    .tot-final{font-size:17px;font-weight:700;color:#E11D48;border-top:1px solid #333;padding-top:6px}
+    .sig{margin-top:40px;display:flex;justify-content:flex-end}
+    .sig-line{border-top:1px solid #333;min-width:220px;text-align:center;padding-top:6px;font-size:11px}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-bottom:14px;font-size:12px}
+    .lbl{color:#666;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+    @media print{button{display:none}}
+  </style></head><body>
+  <div class="header">
+    <div><div class="logo">⚙ Aura Auto</div><div class="sub">by Yusta Labs</div></div>
+    <div style="text-align:right"><div class="ot-num">${ot.num}</div><div class="sub">Fecha: ${ot.fecha}</div></div>
+  </div>
+  <div class="info-grid">
+    <div><div class="lbl">Cliente</div><b>${ot.cliente}</b></div>
+    <div><div class="lbl">Teléfono</div>${ot.tel||'—'}</div>
+    <div><div class="lbl">Patente</div><b>${ot.patente}</b></div>
+    <div><div class="lbl">Vehículo</div>${ot.marca||''} ${ot.modelo||''} ${ot.anio||''}</div>
+    <div><div class="lbl">Kilómetros</div>${ot.km?Number(ot.km).toLocaleString('es-CL')+' km':'—'}</div>
+    <div><div class="lbl">Técnico</div>${getTecNom(ot.tecId)}</div>
+    <div style="grid-column:1/-1"><div class="lbl">Motivo / Descripción</div>${ot.motivo}</div>
+  </div>
+  <h3 style="margin:10px 0 4px;font-size:13px">Mano de Obra</h3>
+  <table><thead><tr><th>Descripción</th><th style="text-align:right">Precio</th></tr></thead><tbody>
+  ${(ot.mano||[]).map(m=>`<tr><td>${m.desc}</td><td style="text-align:right">${fmt$(m.precio)}</td></tr>`).join('')||'<tr><td colspan="2" style="color:#999">Sin mano de obra</td></tr>'}
+  </tbody></table>
+  <h3 style="margin:10px 0 4px;font-size:13px">Repuestos</h3>
+  <table><thead><tr><th>Repuesto</th><th style="text-align:center">Cant.</th><th style="text-align:right">Precio</th></tr></thead><tbody>
+  ${(ot.partes||[]).map(p=>`<tr><td>${p.nom}</td><td style="text-align:center">${p.qty}</td><td style="text-align:right">${fmt$(p.precio*p.qty)}</td></tr>`).join('')||'<tr><td colspan="3" style="color:#999">Sin repuestos</td></tr>'}
+  </tbody></table>
+  <div class="totals">
+    <div class="tot-row"><span>Mano de obra</span><span>${fmt$(manoTotal)}</span></div>
+    <div class="tot-row"><span>Repuestos</span><span>${fmt$(partesTotal)}</span></div>
+    <div class="tot-row tot-final"><span>TOTAL</span><span>${fmt$(total)}</span></div>
+  </div>
+  ${ot.warrantyDays?`<p style="margin-top:12px;font-size:11px;color:#666">Garantía: ${ot.warrantyDays} días (hasta ${ot.warrantyExpiry})</p>`:''}
+  ${ot.notas?`<p style="margin-top:8px;font-size:11px"><b>Notas:</b> ${ot.notas}</p>`:''}
+  <div class="sig"><div class="sig-line">Firma del cliente<br>${ot.cliente}</div></div>
+  <script>window.onload=()=>window.print();<\/script>
+  </body></html>`);
+  win.document.close();
+}
 
 // Pago
 function openPago(id){
@@ -767,6 +844,14 @@ function openPago(id){
         <select id="pago-metodo"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta Corriente</option></select>
       </div>
       <div class="form-group"><label>Km al entregar</label><input id="pago-km" type="number" value="${ot.km||''}" placeholder="Km actuales"></div>
+      <div class="form-group"><label>Garantía</label>
+        <select id="pago-garantia">
+          <option value="0">Sin garantía</option>
+          <option value="30">30 días</option>
+          <option value="60">60 días</option>
+          <option value="90">90 días</option>
+        </select>
+      </div>
     </div>`;
   openModal('modal-pago');
 }
@@ -776,6 +861,15 @@ function confirmarPago(){
   ot.fechaEnt=today();
   ot.metodoPago=document.getElementById('pago-metodo').value;
   ot.kmEnt=document.getElementById('pago-km').value;
+  // Warranty
+  const garantiaDias=Number(document.getElementById('pago-garantia').value)||0;
+  if(garantiaDias>0){
+    const exp=new Date();exp.setDate(exp.getDate()+garantiaDias);
+    ot.warrantyDays=garantiaDias;
+    ot.warrantyExpiry=fmtDate(exp);
+  } else {
+    ot.warrantyDays=0;ot.warrantyExpiry=null;
+  }
   // registrar en caja
   D.caja.push({id:uid(),tipo:'ingreso',desc:`${ot.num} — ${ot.cliente}`,
     mano:(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0),
@@ -804,18 +898,22 @@ function searchHist(){
   </div>
   <div class="card" style="padding:0;overflow:hidden">
     <table><thead><tr><th>N° OT</th><th>Fecha</th><th>Motivo</th><th>Km</th><th>Estado</th><th>Total</th></tr></thead>
-    <tbody>${ots.map(o=>`<tr class="clickable" onclick="viewOT('${o.id}')">
-      <td class="text-pri fw-7">${o.num}</td><td>${o.fecha}</td><td>${o.motivo}</td>
-      <td>${o.km?Number(o.km).toLocaleString('es-CL')+' km':'—'}</td>
-      <td>${badgeEst(o.estado)}</td><td>${fmt$(calcTotal(o))}</td>
-    </tr>`).join('')}</tbody></table>
+    <tbody>${ots.map(o=>{
+      const enGarantia=o.warrantyExpiry&&o.warrantyExpiry>=today();
+      const garantiaBadge=enGarantia?`<span class="badge" style="background:rgba(34,197,94,.15);color:#22C55E;margin-left:4px;">En Garantía hasta ${o.warrantyExpiry}</span>`:'';
+      return`<tr class="clickable" onclick="viewOT('${o.id}')">
+        <td class="text-pri fw-7">${o.num}</td><td>${o.fecha}</td><td>${o.motivo}</td>
+        <td>${o.km?Number(o.km).toLocaleString('es-CL')+' km':'—'}</td>
+        <td>${badgeEst(o.estado)}${garantiaBadge}</td><td>${fmt$(calcTotal(o))}</td>
+      </tr>`;
+    }).join('')}</tbody></table>
   </div>`;
 }
 
 // ===== REPUESTOS =====
 let editRepId=null;
 function renderReps(){
-  const alerts=D.reps.filter(r=>r.stock<=r.min);
+  const alerts=D.reps.filter(r=>r.stock<=(r.stockMin!=null?r.stockMin:r.min!=null?r.min:2));
   document.getElementById('rep-alerts').innerHTML=alerts.length?`<div class="alert alert-red mb-12">⚠ ${alerts.length} repuesto(s) en stock crítico: ${alerts.map(r=>r.nom).join(', ')}</div>`:'';
   const q=(document.getElementById('rep-search')||{value:''}).value.toLowerCase();
   const list=D.reps.filter(r=>!q||`${r.cod}${r.nom}${r.cat}`.toLowerCase().includes(q));
@@ -858,7 +956,12 @@ function saveRep(){
   else{D.reps.push({id:uid(),...obj});}
   save();closeModal('modal-rep');renderReps();
 }
-function delRep(id){if(!confirm('¿Eliminar repuesto?'))return;D.reps=D.reps.filter(r=>r.id!==id);save();renderReps();}
+function delRep(id){
+  const used=D.ots.some(o=>(o.partes||[]).some(p=>p.repId===id));
+  if(used){showToast('No se puede eliminar: el repuesto está en una o más OTs','error');return;}
+  if(!confirm('¿Eliminar repuesto?'))return;
+  D.reps=D.reps.filter(r=>r.id!==id);save();renderReps();
+}
 
 let entRepId=null;
 function openEntrada(id){
@@ -969,7 +1072,12 @@ function saveTec(){
   else{D.tecnicos.push({id:uid(),...obj});}
   save();closeModal('modal-tec');renderTec();
 }
-function delTec(id){if(!confirm('¿Eliminar técnico?'))return;D.tecnicos=D.tecnicos.filter(t=>t.id!==id);save();renderTec();}
+function delTec(id){
+  const otCount=D.ots.filter(o=>o.tecId===id).length;
+  if(otCount>0){showToast(`No se puede eliminar: tiene ${otCount} orden${otCount!==1?'es':''} asignada${otCount!==1?'s':''}.`,'error');return;}
+  if(!confirm('¿Eliminar técnico?'))return;
+  D.tecnicos=D.tecnicos.filter(t=>t.id!==id);save();renderTec();
+}
 
 // ===== CAJA =====
 function renderCaja(){
@@ -983,7 +1091,7 @@ function renderCaja(){
   const neto=totalIng-totalGastos;
   const metodos=['Efectivo','Transferencia','Débito','Crédito','Cuenta Corriente'];
   const porMetodo=metodos.map(m=>({m,v:pagos.filter(p=>p.metodo===m).reduce((s,p)=>s+Number(p.mano||0)+Number(p.partes||0),0)})).filter(x=>x.v>0);
-  document.getElementById('caja-content').innerHTML=`
+  document.getElementById('caja-content').innerHTML=renderLiquidacionTec()+`
     <div class="caja-grid">
       <div>
         <div class="card">
@@ -1026,6 +1134,115 @@ function addGasto(){
 }
 function delGasto(id){D.caja=D.caja.filter(x=>x.id!==id);save();renderCaja();}
 
+// ===== LIQUIDACIÓN POR TÉCNICO =====
+function renderLiquidacionTec(){
+  const mes=today().slice(0,7);
+  const otsMes=D.ots.filter(o=>o.fecha&&o.fecha.startsWith(mes));
+  const rows=D.tecnicos.map(t=>{
+    const ots=otsMes.filter(o=>o.tecId===t.id);
+    const mano=ots.reduce((s,o)=>(o.mano||[]).reduce((ss,m)=>ss+Number(m.precio),s),0);
+    const partes=ots.reduce((s,o)=>(o.partes||[]).reduce((ss,p)=>ss+Number(p.precio)*Number(p.qty),s),0);
+    const total=mano+partes;
+    const comision=Math.round(total*(t.com/100));
+    return{nom:t.nom,count:ots.length,mano,partes,total,comision};
+  });
+  return`<div class="card" style="margin-top:16px">
+    <div class="card-header"><span class="card-title">Liquidación por Técnico — ${mes}</span></div>
+    <table><thead><tr><th>Técnico</th><th>OTs</th><th>Mano de obra</th><th>Repuestos</th><th>Total</th><th>Comisión</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td class="fw-7">${r.nom}</td><td>${r.count}</td><td>${fmt$(r.mano)}</td><td>${fmt$(r.partes)}</td><td class="fw-7">${fmt$(r.total)}</td><td class="text-green">${fmt$(r.comision)}</td></tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+// ===== NOTIFICACIONES =====
+function getNotificaciones(){
+  const notifs=[];
+  D.reps.forEach(r=>{
+    if(r.stock<=r.min) notifs.push({msg:`⚠ ${r.nom}: stock crítico (${r.stock}/${r.min})`,tipo:'stock'});
+  });
+  D.ots.forEach(o=>{
+    if(o.estado==='Esperando Repuesto') notifs.push({msg:`🔧 OT ${o.num} — ${o.cliente}: esperando repuesto`,tipo:'ot'});
+  });
+  return notifs;
+}
+
+function renderNotifBadge(){
+  const notifs=getNotificaciones();
+  const count=notifs.length;
+  // Sidebar badge
+  const sideItem=document.querySelector('[data-page="reps"]');
+  if(sideItem){
+    const existing=sideItem.querySelector('.notif-badge');
+    if(existing) existing.remove();
+    if(count>0){const b=document.createElement('span');b.className='notif-badge';b.textContent=count;sideItem.appendChild(b);}
+  }
+  // Bottom nav badge
+  const bnavItem=document.querySelector('[data-bpage="reps"]');
+  if(bnavItem){
+    const existing=bnavItem.querySelector('.notif-badge');
+    if(existing) existing.remove();
+    if(count>0){const b=document.createElement('span');b.className='notif-badge';b.textContent=count;bnavItem.appendChild(b);}
+  }
+  // Alertas panel in dashboard
+  const panel=document.getElementById('alertas-panel');
+  if(panel){
+    if(notifs.length===0){panel.innerHTML='';return;}
+    panel.innerHTML=notifs.map(n=>{
+      const cls=n.tipo==='stock'?'alert-red':'alert-yellow';
+      return`<div class="alert ${cls}">${n.msg}</div>`;
+    }).join('');
+  }
+}
+
+// ===== REPORTE MENSUAL =====
+function reporteMensual(){
+  const mes=prompt('Mes a exportar (YYYY-MM):',today().slice(0,7));
+  if(!mes) return;
+  const otsDelMes=D.ots.filter(o=>o.fecha&&o.fecha.startsWith(mes));
+  const cajaDelMes=D.caja.filter(x=>x.fecha&&x.fecha.startsWith(mes));
+  // Sheet 1: OTs del Mes
+  const wsData=[['N° OT','Cliente','Patente','Técnico','Estado','Fecha','Total']];
+  otsDelMes.forEach(o=>{
+    wsData.push([o.num,o.cliente,o.patente,getTecNom(o.tecId),o.estado,o.fecha,calcTotal(o)]);
+  });
+  const ws1=XLSX.utils.aoa_to_sheet(wsData);
+  // Sheet 2: Resumen
+  const entregadas=otsDelMes.filter(o=>o.estado==='Entregado');
+  const activas=otsDelMes.filter(o=>o.estado!=='Entregado');
+  const totalIngresos=entregadas.reduce((s,o)=>s+calcTotal(o),0);
+  const totalGastos=cajaDelMes.filter(x=>x.tipo==='gasto').reduce((s,x)=>s+Number(x.monto||0),0);
+  const neto=totalIngresos-totalGastos;
+  const ws2=XLSX.utils.aoa_to_sheet([
+    ['Concepto','Valor'],
+    ['Total ingresos del mes',totalIngresos],
+    ['Total gastos',totalGastos],
+    ['Neto',neto],
+    ['OTs entregadas',entregadas.length],
+    ['OTs activas',activas.length]
+  ]);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws1,'OTs del Mes');
+  XLSX.utils.book_append_sheet(wb,ws2,'Resumen');
+  XLSX.writeFile(wb,`reporte-taller-${mes}.xlsx`);
+}
+
+// ===== TOAST =====
+function showToast(msg, type='info', dur=3500){
+  let t=document.getElementById('auto-toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='auto-toast';
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:12px 20px;font-size:13px;z-index:400;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.borderColor=type==='warn'?'rgba(245,158,11,.5)':type==='error'?'rgba(239,68,68,.5)':'rgba(34,197,94,.5)';
+  t.style.color=type==='warn'?'#F59E0B':type==='error'?'#EF4444':'#22C55E';
+  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(t._tm);
+  t._tm=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';},dur);
+}
+
 // ===== MODAL HELPERS =====
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -1037,3 +1254,4 @@ renderDash();
 </script>
 </body>
 </html>
+
