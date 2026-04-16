@@ -208,9 +208,10 @@ textarea{resize:vertical;min-height:70px}
   <!-- HISTORIAL -->
   <div class="page" id="page-hist">
     <div class="page-title">Historial por Patente</div>
+    <div class="kpi-grid" id="hist-kpis" style="display:grid"></div>
     <div class="search-box">
       <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-      <input type="text" id="hist-search" placeholder="Ingresar patente (ej: ABC123)..." oninput="searchHist()">
+      <input type="text" id="hist-search" placeholder="Ingresar patente (ej: ABC 123)..." oninput="searchHist()">
     </div>
     <div id="hist-results"></div>
   </div>
@@ -271,16 +272,16 @@ textarea{resize:vertical;min-height:70px}
       <button class="modal-close" onclick="closeModal('modal-ot')">×</button>
     </div>
     <div class="form-grid">
-      <div class="form-group"><label>Patente *</label><input id="ot-pat" placeholder="ABC123" oninput="autoFillVehicle(this.value.toUpperCase())" style="text-transform:uppercase"></div>
-      <div class="form-group"><label>Cliente *</label><input id="ot-cli" placeholder="Nombre completo"></div>
-      <div class="form-group"><label>Teléfono</label><input id="ot-tel" placeholder="+56 9 ..."></div>
+      <div class="form-group"><label>Patente *</label><input id="ot-pat" placeholder="ABC 123" oninput="autoFillVehicle(this.value.toUpperCase())" style="text-transform:uppercase"></div>
+      <div class="form-group"><label>Cliente *</label><input id="ot-cli" placeholder="Juan García"></div>
+      <div class="form-group"><label>Teléfono</label><input id="ot-tel" placeholder="11 1234-5678"></div>
       <div class="form-group"><label>Técnico</label>
         <select id="ot-tec"><option value="">Sin asignar</option></select>
       </div>
-      <div class="form-group"><label>Marca</label><input id="ot-marca" placeholder="Toyota"></div>
-      <div class="form-group"><label>Modelo</label><input id="ot-modelo" placeholder="Corolla"></div>
-      <div class="form-group"><label>Año</label><input id="ot-anio" type="number" placeholder="2020"></div>
-      <div class="form-group"><label>Kilometraje</label><input id="ot-km" type="number" placeholder="85000"></div>
+      <div class="form-group"><label>Marca</label><input id="ot-marca" placeholder="Fiat"></div>
+      <div class="form-group"><label>Modelo</label><input id="ot-modelo" placeholder="Cronos"></div>
+      <div class="form-group"><label>Año</label><input id="ot-anio" type="number" placeholder="2021"></div>
+      <div class="form-group"><label>Kilometraje</label><input id="ot-km" type="number" placeholder="45000"></div>
       <div class="form-group full"><label>Motivo / Descripción *</label><textarea id="ot-motivo" placeholder="Descripción del problema..."></textarea></div>
     </div>
     <div class="modal-footer">
@@ -320,8 +321,8 @@ textarea{resize:vertical;min-height:70px}
       </div>
       <div class="form-group"><label>Stock</label><input id="rep-stock" type="number" placeholder="10"></div>
       <div class="form-group"><label>Stock Mínimo</label><input id="rep-min" type="number" placeholder="3"></div>
-      <div class="form-group"><label>Precio Costo</label><input id="rep-pcosto" type="number" placeholder="0"></div>
-      <div class="form-group"><label>Precio Venta</label><input id="rep-pventa" type="number" placeholder="0"></div>
+      <div class="form-group"><label>Precio Costo ($)</label><input id="rep-pcosto" type="number" placeholder="0"></div>
+      <div class="form-group"><label>Precio Venta ($)</label><input id="rep-pventa" type="number" placeholder="0"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-rep')">Cancelar</button>
@@ -338,10 +339,10 @@ textarea{resize:vertical;min-height:70px}
       <button class="modal-close" onclick="closeModal('modal-cli')">×</button>
     </div>
     <div class="form-grid">
-      <div class="form-group"><label>Nombre *</label><input id="cli-nom" placeholder="Juan Pérez"></div>
-      <div class="form-group"><label>Teléfono</label><input id="cli-tel" placeholder="+56 9 ..."></div>
+      <div class="form-group"><label>Nombre *</label><input id="cli-nom" placeholder="Juan García"></div>
+      <div class="form-group"><label>Teléfono</label><input id="cli-tel" placeholder="11 4567-8901"></div>
       <div class="form-group"><label>Email</label><input id="cli-email" placeholder="email@..."></div>
-      <div class="form-group"><label>RUT / ID</label><input id="cli-rut" placeholder="12.345.678-9"></div>
+      <div class="form-group"><label>DNI / CUIL</label><input id="cli-rut" placeholder="20-12345678-3"></div>
       <div class="form-group full"><label>Cuenta Corriente (CC) — dejar en 0 si no aplica</label><input id="cli-cc" type="number" placeholder="0" value="0"></div>
     </div>
     <div class="modal-footer">
@@ -359,9 +360,9 @@ textarea{resize:vertical;min-height:70px}
       <button class="modal-close" onclick="closeModal('modal-tec')">×</button>
     </div>
     <div class="form-grid">
-      <div class="form-group"><label>Nombre *</label><input id="tec-nom" placeholder="Pedro González"></div>
+      <div class="form-group"><label>Nombre *</label><input id="tec-nom" placeholder="Roberto González"></div>
       <div class="form-group"><label>Especialidad</label><input id="tec-esp" placeholder="Motor, Frenos..."></div>
-      <div class="form-group"><label>Teléfono</label><input id="tec-tel" placeholder="+56 9 ..."></div>
+      <div class="form-group"><label>Teléfono</label><input id="tec-tel" placeholder="11 5678-9012"></div>
       <div class="form-group"><label>Comisión %</label><input id="tec-com" type="number" placeholder="10" min="0" max="100"></div>
     </div>
     <div class="modal-footer">
@@ -406,95 +407,150 @@ textarea{resize:vertical;min-height:70px}
 
 <script>
 // ===== DATA =====
-const KEY='aauto-v1';
+const KEY='aauto-v2-ar';
 let D=loadD();
 
 function loadD(){
   const s=localStorage.getItem(KEY);
-  if(s) return JSON.parse(s);
+  if(s){
+    try{return JSON.parse(s);}catch(e){/* corrupción */}
+  }
   return initData();
 }
-function save(){localStorage.setItem(KEY,JSON.stringify(D));}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){showToast('Error al guardar datos','error');}
+}
 
 function initData(){
-  const data={
-    ots:[],reps:[],clientes:[],tecnicos:[],caja:[],nextOT:9
-  };
-  // Técnicos
+  const data={ots:[],reps:[],clientes:[],tecnicos:[],caja:[],nextOT:9};
+
+  // Técnicos — nombres argentinos, teléfonos AR
   data.tecnicos=[
-    {id:'t1',nom:'Pedro González',esp:'Motor / Transmisión',tel:'+56 9 8111 2222',com:12},
-    {id:'t2',nom:'Luis Herrera',esp:'Electricidad / Frenos',tel:'+56 9 9333 4444',com:10}
+    {id:'t1',nom:'Roberto González',esp:'Motor / Transmisión',tel:'11 4521-8832',com:12},
+    {id:'t2',nom:'Marcelo Pereyra',esp:'Electricidad / Frenos',tel:'11 3368-9201',com:10},
+    {id:'t3',nom:'Diego Ramírez',esp:'Suspensión / Dirección',tel:'11 6647-3315',com:11}
   ];
-  // Clientes
+
+  // Clientes — nombres argentinos, DNI/CUIL AR, teléfonos AR
   data.clientes=[
-    {id:'c1',nom:'Carlos Mendoza',tel:'+56 9 7654 3210',email:'cmendoza@mail.com',rut:'12.345.678-9',cc:0},
-    {id:'c2',nom:'Ana Torres',tel:'+56 9 6543 2109',email:'atorres@mail.com',rut:'9.876.543-2',cc:0},
-    {id:'c3',nom:'Roberto Silva',tel:'+56 9 5432 1098',email:'rsilva@mail.com',rut:'15.432.100-K',cc:0},
-    {id:'c4',nom:'Flota Expressa Ltda.',tel:'+56 2 2345 6789',email:'flota@expressa.cl',rut:'76.543.210-3',cc:250000}
+    {id:'c1',nom:'Juan García',tel:'11 4823-7651',email:'jgarcia@gmail.com',rut:'20-24567891-3',cc:0},
+    {id:'c2',nom:'María López',tel:'11 3591-2047',email:'mlopez@hotmail.com',rut:'27-31456782-9',cc:0},
+    {id:'c3',nom:'Carlos Fernández',tel:'11 5534-8820',email:'cfernandez@yahoo.com',rut:'20-18934561-6',cc:0},
+    {id:'c4',nom:'Transporte Belgrano S.A.',tel:'11 4001-3300',email:'flota@tbsa.com.ar',rut:'30-71234568-4',cc:85000}
   ];
-  // Repuestos
+
+  // Repuestos — precios en ARS realistas (2024-2025)
   data.reps=[
     {id:'r1',cod:'FLT-001',nom:'Filtro de aceite Mann',marca:'Mann',cat:'Filtros',stock:8,min:5,pcosto:3500,pventa:6500},
     {id:'r2',cod:'FLT-002',nom:'Filtro de aire K&N',marca:'K&N',cat:'Filtros',stock:3,min:4,pcosto:12000,pventa:22000},
-    {id:'r3',cod:'FRN-001',nom:'Pastillas freno delanteras Brembo',marca:'Brembo',cat:'Frenos',stock:6,min:3,pcosto:18000,pventa:32000},
-    {id:'r4',cod:'FRN-002',nom:'Disco freno delantero',marca:'TRW',cat:'Frenos',stock:2,min:2,pcosto:28000,pventa:48000},
-    {id:'r5',cod:'MOT-001',nom:'Aceite 5W30 sintético 4L',marca:'Mobil 1',cat:'Motor',stock:15,min:8,pcosto:22000,pventa:38000},
-    {id:'r6',cod:'MOT-002',nom:'Bujías NGK (x4)',marca:'NGK',cat:'Motor',stock:10,min:4,pcosto:9500,pventa:16000},
-    {id:'r7',cod:'MOT-003',nom:'Correa dentada',marca:'Gates',cat:'Motor',stock:1,min:2,pcosto:35000,pventa:58000},
-    {id:'r8',cod:'SUS-001',nom:'Amortiguador trasero',marca:'Monroe',cat:'Suspensión',stock:4,min:2,pcosto:42000,pventa:72000},
-    {id:'r9',cod:'SUS-002',nom:'Rótula inferior',marca:'Moog',cat:'Suspensión',stock:2,min:2,pcosto:15000,pventa:26000},
-    {id:'r10',cod:'ELC-001',nom:'Batería 60Ah',marca:'Bosch',cat:'Electricidad',stock:3,min:2,pcosto:65000,pventa:105000},
-    {id:'r11',cod:'ELC-002',nom:'Alternador remanufacturado',marca:'Bosch',cat:'Electricidad',stock:1,min:1,pcosto:120000,pventa:190000},
-    {id:'r12',cod:'FLT-003',nom:'Filtro combustible',marca:'WIX',cat:'Filtros',stock:5,min:3,pcosto:4500,pventa:8500},
-    {id:'r13',cod:'MOT-004',nom:'Junta culata',marca:'Elring',cat:'Motor',stock:1,min:1,pcosto:55000,pventa:88000},
-    {id:'r14',cod:'FRN-003',nom:'Líquido de frenos DOT4 500ml',marca:'ATE',cat:'Frenos',stock:7,min:4,pcosto:3800,pventa:7000},
-    {id:'r15',cod:'SUS-003',nom:'Terminal dirección',marca:'TRW',cat:'Suspensión',stock:3,min:2,pcosto:12000,pventa:21000}
+    {id:'r3',cod:'FRN-001',nom:'Pastillas freno delanteras Brembo',marca:'Brembo',cat:'Frenos',stock:6,min:3,pcosto:18500,pventa:34000},
+    {id:'r4',cod:'FRN-002',nom:'Disco freno delantero',marca:'TRW',cat:'Frenos',stock:2,min:2,pcosto:29000,pventa:52000},
+    {id:'r5',cod:'MOT-001',nom:'Aceite 5W30 sintético 4L',marca:'Mobil 1',cat:'Motor',stock:15,min:8,pcosto:22000,pventa:41000},
+    {id:'r6',cod:'MOT-002',nom:'Bujías NGK (x4)',marca:'NGK',cat:'Motor',stock:10,min:4,pcosto:9800,pventa:18500},
+    {id:'r7',cod:'MOT-003',nom:'Correa dentada',marca:'Gates',cat:'Motor',stock:1,min:2,pcosto:38000,pventa:65000},
+    {id:'r8',cod:'SUS-001',nom:'Amortiguador trasero',marca:'Monroe',cat:'Suspensión',stock:4,min:2,pcosto:45000,pventa:78000},
+    {id:'r9',cod:'SUS-002',nom:'Rótula inferior',marca:'Moog',cat:'Suspensión',stock:2,min:2,pcosto:16500,pventa:29000},
+    {id:'r10',cod:'ELC-001',nom:'Batería 60Ah',marca:'Bosch',cat:'Electricidad',stock:3,min:2,pcosto:68000,pventa:115000},
+    {id:'r11',cod:'ELC-002',nom:'Alternador remanufacturado',marca:'Bosch',cat:'Electricidad',stock:1,min:1,pcosto:125000,pventa:200000},
+    {id:'r12',cod:'FLT-003',nom:'Filtro combustible',marca:'WIX',cat:'Filtros',stock:5,min:3,pcosto:4800,pventa:9500},
+    {id:'r13',cod:'MOT-004',nom:'Junta culata',marca:'Elring',cat:'Motor',stock:1,min:1,pcosto:58000,pventa:95000},
+    {id:'r14',cod:'FRN-003',nom:'Líquido de frenos DOT4 500ml',marca:'ATE',cat:'Frenos',stock:7,min:4,pcosto:4000,pventa:7800},
+    {id:'r15',cod:'SUS-003',nom:'Terminal dirección',marca:'TRW',cat:'Suspensión',stock:3,min:2,pcosto:13000,pventa:23500}
   ];
-  // OTs
-  const hoy=fmtDate(new Date());
-  const ayer=fmtDate(new Date(Date.now()-86400000));
+
+  // Fechas ISO para almacenamiento interno
+  const hoy=todayISO();
+  const ayer=isoOffset(-1);
+  const antier=isoOffset(-2);
+  const hace3=isoOffset(-3);
+
+  // OTs — patentes AR (formato ABC 123 y AA 123 BB), marcas populares en Argentina
   data.ots=[
-    {id:'ot1',num:'OT-0001',patente:'ABC123',cliente:'Carlos Mendoza',tel:'+56 9 7654 3210',tecId:'t1',marca:'Toyota',modelo:'Corolla',anio:2019,km:92000,motivo:'Mantención 90k km: aceite, filtros y revisión general',estado:'Entregado',fecha:ayer,fechaEnt:ayer,kmEnt:92000,
-     mano:[{desc:'Mantención completa 90k',precio:45000}],
-     partes:[{repId:'r1',nom:'Filtro de aceite Mann',qty:1,precio:6500},{repId:'r5',nom:'Aceite 5W30 sintético 4L',qty:1,precio:38000},{repId:'r12',nom:'Filtro combustible',qty:1,precio:8500}],
-     notas:'Todo OK, próxima mantención a los 102.000 km',metodoPago:'Efectivo'},
-    {id:'ot2',num:'OT-0002',patente:'DEF456',cliente:'Ana Torres',tel:'+56 9 6543 2109',tecId:'t2',marca:'Chevrolet',modelo:'Spark',anio:2021,km:34000,motivo:'Revisión frenos: chirrido al frenar',estado:'En Reparación',fecha:hoy,
-     mano:[{desc:'Diagnóstico sistema frenos',precio:15000},{desc:'Cambio pastillas y discos delanteros',precio:35000}],
-     partes:[{repId:'r3',nom:'Pastillas freno delanteras Brembo',qty:1,precio:32000},{repId:'r4',nom:'Disco freno delantero',qty:2,precio:48000}],
+    {id:'ot1',num:'OT-0001',patente:'ABC 123',cliente:'Juan García',tel:'11 4823-7651',tecId:'t1',
+     marca:'Fiat',modelo:'Cronos',anio:2021,km:62000,
+     motivo:'Service 60.000 km: aceite, filtros y revisión general',estado:'Entregado',
+     fecha:antier,fechaEnt:ayer,kmEnt:62000,
+     mano:[{desc:'Service completo 60k',precio:25000}],
+     partes:[{repId:'r1',nom:'Filtro de aceite Mann',qty:1,precio:6500},{repId:'r5',nom:'Aceite 5W30 sintético 4L',qty:1,precio:41000},{repId:'r12',nom:'Filtro combustible',qty:1,precio:9500}],
+     notas:'Próximo service a los 72.000 km',metodoPago:'Transferencia'},
+    {id:'ot2',num:'OT-0002',patente:'DEF 456',cliente:'María López',tel:'11 3591-2047',tecId:'t2',
+     marca:'Volkswagen',modelo:'Polo',anio:2022,km:28000,
+     motivo:'Revisión frenos: chirrido al frenar en ciudad',estado:'En Reparación',fecha:hoy,
+     mano:[{desc:'Diagnóstico sistema frenos',precio:12000},{desc:'Cambio pastillas y discos delanteros',precio:38000}],
+     partes:[{repId:'r3',nom:'Pastillas freno delanteras Brembo',qty:1,precio:34000},{repId:'r4',nom:'Disco freno delantero',qty:2,precio:52000}],
      notas:''},
-    {id:'ot3',num:'OT-0003',patente:'GHI789',cliente:'Roberto Silva',tel:'+56 9 5432 1098',tecId:'t1',marca:'Nissan',modelo:'Sentra',anio:2018,km:105000,motivo:'Motor pierde potencia, humo azul en escape',estado:'Diagnóstico',fecha:hoy,
+    {id:'ot3',num:'OT-0003',patente:'GHI 789',cliente:'Carlos Fernández',tel:'11 5534-8820',tecId:'t1',
+     marca:'Chevrolet',modelo:'Onix',anio:2020,km:91000,
+     motivo:'Motor pierde potencia, consumo excesivo de combustible',estado:'Diagnóstico',fecha:hoy,
      mano:[],partes:[],notas:''},
-    {id:'ot4',num:'OT-0004',patente:'JKL012',cliente:'Flota Expressa Ltda.',tel:'+56 2 2345 6789',tecId:'t2',marca:'Hyundai',modelo:'Accent',anio:2020,km:67000,motivo:'Batería descargada, alternador revisión',estado:'Esperando Repuesto',fecha:hoy,
-     mano:[{desc:'Diagnóstico eléctrico',precio:20000}],
-     partes:[{repId:'r10',nom:'Batería 60Ah',qty:1,precio:105000}],
-     notas:'Esperando alternador remanufacturado'},
-    {id:'ot5',num:'OT-0005',patente:'MNO345',cliente:'Carlos Mendoza',tel:'+56 9 7654 3210',tecId:'t1',marca:'Toyota',modelo:'Fortuner',anio:2022,km:28000,motivo:'Ruido en suspensión delantera izquierda',estado:'Listo',fecha:hoy,
-     mano:[{desc:'Revisión y cambio rótulas delanteras',precio:40000}],
-     partes:[{repId:'r9',nom:'Rótula inferior',qty:2,precio:26000}],
+    {id:'ot4',num:'OT-0004',patente:'AA 123 BB',cliente:'Transporte Belgrano S.A.',tel:'11 4001-3300',tecId:'t2',
+     marca:'Ford',modelo:'Transit',anio:2019,km:145000,
+     motivo:'Batería descargada frecuentemente, alternador a revisar',estado:'Esperando Repuesto',fecha:hoy,
+     mano:[{desc:'Diagnóstico eléctrico completo',precio:18000}],
+     partes:[{repId:'r10',nom:'Batería 60Ah',qty:1,precio:115000}],
+     notas:'En espera de alternador remanufacturado'},
+    {id:'ot5',num:'OT-0005',patente:'JKL 012',cliente:'Juan García',tel:'11 4823-7651',tecId:'t3',
+     marca:'Renault',modelo:'Sandero',anio:2021,km:37000,
+     motivo:'Ruido en suspensión delantera izquierda al girar',estado:'Listo',fecha:hoy,
+     mano:[{desc:'Revisión y cambio rótulas delanteras',precio:32000}],
+     partes:[{repId:'r9',nom:'Rótula inferior',qty:2,precio:29000}],
      notas:'Listo para entrega'},
-    {id:'ot6',num:'OT-0006',patente:'PQR678',cliente:'Ana Torres',tel:'+56 9 6543 2109',tecId:'t2',marca:'Kia',modelo:'Picanto',anio:2023,km:12000,motivo:'Cambio bujías y revisión motor',estado:'Recibido',fecha:hoy,
+    {id:'ot6',num:'OT-0006',patente:'MNO 345',cliente:'María López',tel:'11 3591-2047',tecId:'t2',
+     marca:'Toyota',modelo:'Etios',anio:2018,km:78000,
+     motivo:'Cambio bujías y revisión motor completo',estado:'Recibido',fecha:hoy,
      mano:[],partes:[],notas:''},
-    {id:'ot7',num:'OT-0007',patente:'ABC123',cliente:'Carlos Mendoza',tel:'+56 9 7654 3210',tecId:'t1',marca:'Toyota',modelo:'Corolla',anio:2019,km:88000,motivo:'Cambio correa dentada preventivo',estado:'Entregado',fechaEnt:ayer,kmEnt:88000,
-     fecha:fmtDate(new Date(Date.now()-172800000)),
-     mano:[{desc:'Cambio correa dentada + tensor',precio:55000}],
-     partes:[{repId:'r7',nom:'Correa dentada',qty:1,precio:58000}],
-     notas:'',metodoPago:'Transferencia'},
-    {id:'ot8',num:'OT-0008',patente:'STU901',cliente:'Flota Expressa Ltda.',tel:'+56 2 2345 6789',tecId:'t2',marca:'Suzuki',modelo:'Swift',anio:2020,km:45000,motivo:'Servicio periódico 45k',estado:'En Reparación',fecha:hoy,
-     mano:[{desc:'Mantención periódica 45k',precio:38000}],
-     partes:[{repId:'r1',nom:'Filtro de aceite Mann',qty:1,precio:6500},{repId:'r5',nom:'Aceite 5W30 sintético 4L',qty:1,precio:38000}],
+    {id:'ot7',num:'OT-0007',patente:'ABC 123',cliente:'Juan García',tel:'11 4823-7651',tecId:'t1',
+     marca:'Fiat',modelo:'Cronos',anio:2021,km:58000,
+     motivo:'Cambio correa dentada preventivo',estado:'Entregado',
+     fecha:hace3,fechaEnt:antier,kmEnt:58000,
+     mano:[{desc:'Cambio correa dentada + tensor + polea',precio:48000}],
+     partes:[{repId:'r7',nom:'Correa dentada',qty:1,precio:65000}],
+     notas:'Garantía 6 meses / 10.000 km',metodoPago:'Efectivo',warrantyDays:180,warrantyExpiry:isoOffset(180)},
+    {id:'ot8',num:'OT-0008',patente:'PQR 678',cliente:'Transporte Belgrano S.A.',tel:'11 4001-3300',tecId:'t3',
+     marca:'Peugeot',modelo:'Partner',anio:2020,km:88000,
+     motivo:'Cambio amortiguadores traseros + revisión suspensión',estado:'En Reparación',fecha:hoy,
+     mano:[{desc:'Cambio amortiguadores traseros',precio:35000}],
+     partes:[{repId:'r8',nom:'Amortiguador trasero',qty:2,precio:78000}],
      notas:''}
   ];
-  // Caja
+
+  // Caja — gastos del día con montos ARS
   data.caja=[
-    {id:'gx1',tipo:'gasto',desc:'Insumos limpieza',monto:8500,fecha:hoy},
-    {id:'gx2',tipo:'gasto',desc:'Gas soldadura',monto:15000,fecha:hoy}
+    {id:'gx1',tipo:'gasto',desc:'Insumos limpieza y trapos',monto:4500,fecha:hoy},
+    {id:'gx2',tipo:'gasto',desc:'Gas soldadura oxiacetilénica',monto:18000,fecha:hoy},
+    {id:'gx3',tipo:'gasto',desc:'Servicios (luz/agua)',monto:12500,fecha:hace3}
   ];
   return data;
 }
 
-function fmtDate(d){return d instanceof Date?d.toISOString().split('T')[0]:d;}
-function today(){return fmtDate(new Date());}
-function fmt$(n){return '$'+Number(n||0).toLocaleString('es-CL');}
+// ===== UTILIDADES DE FECHA =====
+// Almacenamiento interno siempre en ISO YYYY-MM-DD
+// Presentación al usuario en DD/MM/YYYY
+function todayISO(){return new Date().toISOString().split('T')[0];}
+function isoOffset(days){
+  const d=new Date();d.setDate(d.getDate()+days);return d.toISOString().split('T')[0];
+}
+// Alias usado en código legacy
+function today(){return todayISO();}
+function fmtDate(d){
+  if(!d) return '—';
+  // Si ya es Date, convertir a ISO
+  if(d instanceof Date) return d.toISOString().split('T')[0];
+  return String(d);
+}
+// Convertir ISO a DD/MM/YYYY para mostrar al usuario
+function isoToDisplay(iso){
+  if(!iso||typeof iso!=='string') return '—';
+  const parts=iso.split('-');
+  if(parts.length!==3) return iso;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+// Formatear moneda ARS: $12.500
+function fmt$(n){
+  const num=Number(n);
+  if(isNaN(num)) return '$0';
+  return '$'+num.toLocaleString('es-AR');
+}
 function uid(){return 'x'+Math.random().toString(36).slice(2,9);}
 
 // ===== NAVIGATION =====
@@ -510,19 +566,21 @@ const PAGES=[
 function buildNav(){
   const sn=document.getElementById('sidenav');
   const bn=document.getElementById('bnav');
+  if(!sn||!bn) return;
   const bPages=['dash','ots','hist','reps','caja'];
   sn.innerHTML=PAGES.map(p=>`<div class="nav-item${p.id==='dash'?' active':''}" onclick="gotoPage('${p.id}',this)" data-page="${p.id}">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg>${p.label}</div>`).join('');
-  bn.innerHTML=bPages.map(id=>{const p=PAGES.find(x=>x.id===id);return`<div class="bnav-item${id==='dash'?' active':''}" onclick="gotoPage('${id}')" data-bpage="${id}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg><span>${p.label.split(' ')[0]}</span></div>`}).join('');
+  bn.innerHTML=bPages.map(id=>{const p=PAGES.find(x=>x.id===id);if(!p)return'';return`<div class="bnav-item${id==='dash'?' active':''}" onclick="gotoPage('${id}')" data-bpage="${id}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg><span>${p.label.split(' ')[0]}</span></div>`;}).join('');
   renderNotifBadge();
 }
 
-function gotoPage(id,el){
+function gotoPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.querySelectorAll('.bnav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
+  const pageEl=document.getElementById('page-'+id);
+  if(pageEl) pageEl.classList.add('active');
   const ni=document.querySelector(`[data-page="${id}"]`);if(ni)ni.classList.add('active');
   const bi=document.querySelector(`[data-bpage="${id}"]`);if(bi)bi.classList.add('active');
   renderPage(id);
@@ -531,7 +589,7 @@ function gotoPage(id,el){
 function renderPage(id){
   if(id==='dash') renderDash();
   else if(id==='ots') renderOTs();
-  else if(id==='hist') searchHist();
+  else if(id==='hist'){renderHistKPIs();searchHist();}
   else if(id==='reps') renderReps();
   else if(id==='ct') renderCT();
   else if(id==='caja') renderCaja();
@@ -540,30 +598,38 @@ function renderPage(id){
 // ===== STATUS HELPERS =====
 const ESTADOS=['Recibido','Diagnóstico','Esperando Repuesto','En Reparación','Listo','Entregado'];
 const ESTADO_CLS={'Recibido':'b-rcb','Diagnóstico':'b-diag','Esperando Repuesto':'b-rep','En Reparación':'b-work','Listo':'b-done','Entregado':'b-del'};
-function badgeEst(e){return`<span class="badge ${ESTADO_CLS[e]||'b-rcb'}">${e}</span>`;}
+function badgeEst(e){return`<span class="badge ${ESTADO_CLS[e]||'b-rcb'}">${e||'—'}</span>`;}
 
 // ===== DASHBOARD =====
 function renderDash(){
   const activas=D.ots.filter(o=>o.estado!=='Entregado');
   const entHoy=D.ots.filter(o=>o.estado==='Entregado'&&o.fechaEnt===today());
   const ingHoy=entHoy.reduce((s,o)=>s+calcTotal(o),0);
-  const criticos=D.reps.filter(r=>r.stock<=(r.stockMin!=null?r.stockMin:r.min!=null?r.min:2));
+  const criticos=D.reps.filter(r=>Number(r.stock)<=Number(r.min||0));
   const g=document.getElementById('kpi-grid');
-  g.innerHTML=`
-    <div class="kpi"><div class="kpi-val">${activas.length}</div><div class="kpi-lbl">OTs Activas</div></div>
-    <div class="kpi"><div class="kpi-val">${entHoy.length}</div><div class="kpi-lbl">Entregadas Hoy</div></div>
-    <div class="kpi"><div class="kpi-val text-green" style="font-size:20px">${fmt$(ingHoy)}</div><div class="kpi-lbl">Ingresos del Día</div></div>
-    <div class="kpi"><div class="kpi-val text-red">${criticos.length}</div><div class="kpi-lbl">Repuestos Críticos</div></div>`;
-  document.getElementById('dash-ots').innerHTML=activas.length?activas.map(o=>`
-    <tr class="clickable" onclick="viewOT('${o.id}')">
-      <td><span class="text-pri fw-7">${o.num}</span></td>
-      <td>${o.cliente}</td><td>${o.patente}</td>
-      <td class="hide-m">${getTecNom(o.tecId)}</td>
-      <td>${badgeEst(o.estado)}</td>
-    </tr>`).join(''):`<tr><td colspan="5" class="empty">Sin OTs activas</td></tr>`;
-  document.getElementById('dash-reps').innerHTML=criticos.length?criticos.map(r=>`
-    <tr><td><span class="text-muted">${r.cod}</span></td><td>${r.nom}</td>
-    <td><span class="text-red fw-7">${r.stock}</span></td><td>${r.min}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">Sin alertas</td></tr>`;
+  if(g){
+    g.innerHTML=`
+      <div class="kpi"><div class="kpi-val">${activas.length}</div><div class="kpi-lbl">OTs Activas</div></div>
+      <div class="kpi"><div class="kpi-val">${entHoy.length}</div><div class="kpi-lbl">Entregadas Hoy</div></div>
+      <div class="kpi"><div class="kpi-val text-green" style="font-size:20px">${fmt$(ingHoy)}</div><div class="kpi-lbl">Ingresos del Día</div></div>
+      <div class="kpi"><div class="kpi-val text-red">${criticos.length}</div><div class="kpi-lbl">Repuestos Críticos</div></div>`;
+  }
+  const dashOts=document.getElementById('dash-ots');
+  if(dashOts){
+    dashOts.innerHTML=activas.length?activas.map(o=>`
+      <tr class="clickable" onclick="viewOT('${o.id}')">
+        <td><span class="text-pri fw-7">${o.num||'—'}</span></td>
+        <td>${o.cliente||'—'}</td><td>${o.patente||'—'}</td>
+        <td class="hide-m">${getTecNom(o.tecId)}</td>
+        <td>${badgeEst(o.estado)}</td>
+      </tr>`).join(''):`<tr><td colspan="5" class="empty">Sin OTs activas</td></tr>`;
+  }
+  const dashReps=document.getElementById('dash-reps');
+  if(dashReps){
+    dashReps.innerHTML=criticos.length?criticos.map(r=>`
+      <tr><td><span class="text-muted">${r.cod||'—'}</span></td><td>${r.nom||'—'}</td>
+      <td><span class="text-red fw-7">${r.stock}</span></td><td>${r.min}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">Sin alertas de stock</td></tr>`;
+  }
   renderNotifBadge();
 }
 
@@ -571,97 +637,120 @@ function renderDash(){
 let otFilter='';
 function renderOTs(){
   const filters=document.getElementById('ot-filters');
-  filters.innerHTML=`<button class="btn btn-sm ${!otFilter?'btn-pri':'btn-ghost'}" onclick="setOTFilter('')">Todas</button>`+
-    ESTADOS.map(e=>`<button class="btn btn-sm ${otFilter===e?'btn-pri':'btn-ghost'}" onclick="setOTFilter('${e}')">${e}</button>`).join('');
-  const q=(document.getElementById('ot-search')||{value:''}).value.toLowerCase();
-  let list=D.ots.filter(o=>{
+  if(filters){
+    filters.innerHTML=`<button class="btn btn-sm ${!otFilter?'btn-pri':'btn-ghost'}" onclick="setOTFilter('')">Todas</button>`+
+      ESTADOS.map(e=>`<button class="btn btn-sm ${otFilter===e?'btn-pri':'btn-ghost'}" onclick="setOTFilter('${e}')">${e}</button>`).join('');
+  }
+  const searchEl=document.getElementById('ot-search');
+  const q=searchEl?searchEl.value.toLowerCase():'';
+  const list=D.ots.filter(o=>{
     if(otFilter&&o.estado!==otFilter) return false;
-    if(q&&!`${o.num}${o.cliente}${o.patente}`.toLowerCase().includes(q)) return false;
+    if(q&&!`${o.num||''}${o.cliente||''}${o.patente||''}`.toLowerCase().includes(q)) return false;
     return true;
   });
-  document.getElementById('ot-list').innerHTML=list.length?list.map(o=>`
-    <tr class="clickable" onclick="viewOT('${o.id}')">
-      <td><span class="text-pri fw-7">${o.num}</span></td>
-      <td>${o.cliente}</td><td>${o.patente}</td>
-      <td class="hide-m">${getTecNom(o.tecId)}</td>
-      <td>${badgeEst(o.estado)}</td><td class="text-muted">${o.fecha}</td>
-      <td onclick="event.stopPropagation()" style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="editOT('${o.id}')">✏</button> <button class="btn btn-ghost btn-sm" onclick="curOTId='${o.id}';printOT()">🖨️</button></td>
-    </tr>`).join(''):`<tr><td colspan="7" class="empty">Sin resultados</td></tr>`;
+  const otList=document.getElementById('ot-list');
+  if(otList){
+    otList.innerHTML=list.length?list.map(o=>`
+      <tr class="clickable" onclick="viewOT('${o.id}')">
+        <td><span class="text-pri fw-7">${o.num||'—'}</span></td>
+        <td>${o.cliente||'—'}</td><td>${o.patente||'—'}</td>
+        <td class="hide-m">${getTecNom(o.tecId)}</td>
+        <td>${badgeEst(o.estado)}</td><td class="text-muted">${isoToDisplay(o.fecha)}</td>
+        <td onclick="event.stopPropagation()" style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="editOT('${o.id}')">✏</button> <button class="btn btn-ghost btn-sm" onclick="curOTId='${o.id}';printOT()">🖨️</button></td>
+      </tr>`).join(''):`<tr><td colspan="7" class="empty">Sin resultados</td></tr>`;
+  }
 }
 function setOTFilter(f){otFilter=f;renderOTs();}
 
 function calcTotal(ot){
-  const m=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0);
-  const p=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0);
-  return m+p;
+  if(!ot) return 0;
+  const m=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio||0),0);
+  const p=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio||0)*Number(x.qty||0),0);
+  return (isNaN(m)?0:m)+(isNaN(p)?0:p);
 }
-function getTecNom(id){const t=D.tecnicos.find(x=>x.id===id);return t?t.nom:'—';}
+function getTecNom(id){
+  if(!id) return '—';
+  const t=D.tecnicos.find(x=>x.id===id);
+  return t?t.nom:'—';
+}
 
 // Nueva OT
 let editOTId=null;
 function openNewOT(){
   editOTId=null;
-  document.getElementById('mot-title').textContent='Nueva Orden de Trabajo';
-  ['ot-pat','ot-cli','ot-tel','ot-marca','ot-modelo','ot-anio','ot-km','ot-motivo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const titleEl=document.getElementById('mot-title');
+  if(titleEl) titleEl.textContent='Nueva Orden de Trabajo';
+  ['ot-pat','ot-cli','ot-tel','ot-marca','ot-modelo','ot-anio','ot-km','ot-motivo'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
   fillTecSelect('ot-tec','');
   openModal('modal-ot');
 }
 function editOT(id){
   const ot=D.ots.find(o=>o.id===id);if(!ot)return;
   editOTId=id;
-  document.getElementById('mot-title').textContent='Editar OT '+ot.num;
-  document.getElementById('ot-pat').value=ot.patente;
-  document.getElementById('ot-cli').value=ot.cliente;
-  document.getElementById('ot-tel').value=ot.tel||'';
-  document.getElementById('ot-marca').value=ot.marca||'';
-  document.getElementById('ot-modelo').value=ot.modelo||'';
-  document.getElementById('ot-anio').value=ot.anio||'';
-  document.getElementById('ot-km').value=ot.km||'';
-  document.getElementById('ot-motivo').value=ot.motivo||'';
+  const titleEl=document.getElementById('mot-title');
+  if(titleEl) titleEl.textContent='Editar OT '+ot.num;
+  const setVal=(elId,val)=>{const el=document.getElementById(elId);if(el)el.value=val!=null?val:'';};
+  setVal('ot-pat',ot.patente);
+  setVal('ot-cli',ot.cliente);
+  setVal('ot-tel',ot.tel);
+  setVal('ot-marca',ot.marca);
+  setVal('ot-modelo',ot.modelo);
+  setVal('ot-anio',ot.anio);
+  setVal('ot-km',ot.km);
+  setVal('ot-motivo',ot.motivo);
   fillTecSelect('ot-tec',ot.tecId||'');
   openModal('modal-ot');
 }
 function fillTecSelect(selId,val){
   const s=document.getElementById(selId);
+  if(!s) return;
   s.innerHTML='<option value="">Sin asignar</option>'+D.tecnicos.map(t=>{
     const openOTs=D.ots.filter(o=>o.tecId===t.id&&o.estado!=='Entregado').length;
-    const label=`${t.nom} (${openOTs} OT${openOTs!==1?'s':''} abiertas)`;
+    const label=`${t.nom} (${openOTs} OT${openOTs!==1?'s':''} abierta${openOTs!==1?'s':''})`;
     return`<option value="${t.id}"${t.id===val?' selected':''}>${label}</option>`;
   }).join('');
 }
 function autoFillVehicle(pat){
+  if(!pat) return;
   const ot=D.ots.find(o=>o.patente===pat);
-  if(ot){
-    if(!document.getElementById('ot-marca').value) document.getElementById('ot-marca').value=ot.marca||'';
-    if(!document.getElementById('ot-modelo').value) document.getElementById('ot-modelo').value=ot.modelo||'';
-    if(!document.getElementById('ot-anio').value) document.getElementById('ot-anio').value=ot.anio||'';
-    const cli=ot.cliente;
-    if(!document.getElementById('ot-cli').value) document.getElementById('ot-cli').value=cli;
-    if(!document.getElementById('ot-tel').value) document.getElementById('ot-tel').value=ot.tel||'';
-  }
+  if(!ot) return;
+  const setIfEmpty=(id,val)=>{const el=document.getElementById(id);if(el&&!el.value&&val)el.value=val;};
+  setIfEmpty('ot-marca',ot.marca);
+  setIfEmpty('ot-modelo',ot.modelo);
+  setIfEmpty('ot-anio',ot.anio);
+  setIfEmpty('ot-cli',ot.cliente);
+  setIfEmpty('ot-tel',ot.tel);
 }
 function saveOT(){
-  const pat=document.getElementById('ot-pat').value.trim().toUpperCase();
-  const cli=document.getElementById('ot-cli').value.trim();
-  const motivo=document.getElementById('ot-motivo').value.trim();
+  const patEl=document.getElementById('ot-pat');
+  const cliEl=document.getElementById('ot-cli');
+  const motivoEl=document.getElementById('ot-motivo');
+  if(!patEl||!cliEl||!motivoEl) return;
+  const pat=patEl.value.trim().toUpperCase();
+  const cli=cliEl.value.trim();
+  const motivo=motivoEl.value.trim();
   if(!pat||!cli||!motivo){alert('Patente, cliente y motivo son requeridos.');return;}
+  const getVal=id=>{const el=document.getElementById(id);return el?el.value:'';};
   if(editOTId){
     const ot=D.ots.find(o=>o.id===editOTId);
-    Object.assign(ot,{patente:pat,cliente:cli,tel:document.getElementById('ot-tel').value,
-      tecId:document.getElementById('ot-tec').value,
-      marca:document.getElementById('ot-marca').value,
-      modelo:document.getElementById('ot-modelo').value,
-      anio:document.getElementById('ot-anio').value,
-      km:document.getElementById('ot-km').value,motivo});
+    if(!ot) return;
+    Object.assign(ot,{patente:pat,cliente:cli,tel:getVal('ot-tel'),
+      tecId:getVal('ot-tec'),
+      marca:getVal('ot-marca'),
+      modelo:getVal('ot-modelo'),
+      anio:getVal('ot-anio'),
+      km:getVal('ot-km'),motivo});
   } else {
     const num='OT-'+String(D.nextOT).padStart(4,'0');D.nextOT++;
     D.ots.push({id:uid(),num,patente:pat,cliente:cli,
-      tel:document.getElementById('ot-tel').value,
-      tecId:document.getElementById('ot-tec').value,
-      marca:document.getElementById('ot-marca').value,
-      modelo:document.getElementById('ot-modelo').value,
-      anio:document.getElementById('ot-anio').value,
-      km:document.getElementById('ot-km').value,
+      tel:getVal('ot-tel'),
+      tecId:getVal('ot-tec'),
+      marca:getVal('ot-marca'),
+      modelo:getVal('ot-modelo'),
+      anio:getVal('ot-anio'),
+      km:getVal('ot-km'),
       motivo,estado:'Recibido',fecha:today(),mano:[],partes:[],notas:''});
   }
   save();closeModal('modal-ot');renderOTs();renderDash();
@@ -672,26 +761,30 @@ let curOTId=null;
 function viewOT(id){
   curOTId=id;
   const ot=D.ots.find(o=>o.id===id);if(!ot)return;
-  document.getElementById('motv-title').textContent=ot.num+' — '+ot.patente;
+  const titleEl=document.getElementById('motv-title');
+  if(titleEl) titleEl.textContent=(ot.num||'OT')+' — '+(ot.patente||'');
   renderOTView(ot);
   openModal('modal-otv');
 }
 function renderOTView(ot){
+  if(!ot) return;
+  const bodyEl=document.getElementById('otv-body');
+  if(!bodyEl) return;
   const total=calcTotal(ot);
-  const manoTotal=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0);
-  const partesTotal=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0);
+  const manoTotal=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio||0),0);
+  const partesTotal=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio||0)*Number(x.qty||0),0);
   const entregado=ot.estado==='Entregado';
-  document.getElementById('otv-body').innerHTML=`
+  bodyEl.innerHTML=`
     <div class="ot-section">
       <div class="ot-section-title">Información del Vehículo</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
-        <div><span class="text-muted">Cliente:</span> <b>${ot.cliente}</b></div>
-        <div><span class="text-muted">Patente:</span> <b>${ot.patente}</b></div>
-        <div><span class="text-muted">Vehículo:</span> ${ot.marca||''} ${ot.modelo||''} ${ot.anio||''}</div>
-        <div><span class="text-muted">Km:</span> ${ot.km?Number(ot.km).toLocaleString('es-CL')+' km':'—'}</div>
+        <div><span class="text-muted">Cliente:</span> <b>${ot.cliente||'—'}</b></div>
+        <div><span class="text-muted">Patente:</span> <b>${ot.patente||'—'}</b></div>
+        <div><span class="text-muted">Vehículo:</span> ${[ot.marca,ot.modelo,ot.anio].filter(Boolean).join(' ')||'—'}</div>
+        <div><span class="text-muted">Km:</span> ${ot.km?Number(ot.km).toLocaleString('es-AR')+' km':'—'}</div>
         <div><span class="text-muted">Técnico:</span> ${getTecNom(ot.tecId)}</div>
-        <div><span class="text-muted">Fecha:</span> ${ot.fecha}</div>
-        <div class="full" style="grid-column:1/-1"><span class="text-muted">Motivo:</span> ${ot.motivo}</div>
+        <div><span class="text-muted">Fecha:</span> ${isoToDisplay(ot.fecha)}</div>
+        <div class="full" style="grid-column:1/-1"><span class="text-muted">Motivo:</span> ${ot.motivo||'—'}</div>
       </div>
     </div>
     <div class="ot-section no-print">
@@ -701,24 +794,24 @@ function renderOTView(ot){
     <div class="ot-section">
       <div class="ot-section-title">Mano de Obra</div>
       <table><thead><tr><th>Descripción</th><th>Precio</th><th class="no-print"></th></tr></thead>
-      <tbody>${(ot.mano||[]).map((m,i)=>`<tr><td>${m.desc}</td><td>${fmt$(m.precio)}</td>
-        <td class="no-print"><button class="btn btn-red btn-sm" onclick="removeItem('mano',${i})">✕</button></td></tr>`).join('')||'<tr><td colspan="3" class="empty" style="padding:8px">Sin mano de obra</td></tr>'}
+      <tbody>${(ot.mano||[]).map((m,i)=>`<tr><td>${m.desc||'—'}</td><td>${fmt$(m.precio)}</td>
+        <td class="no-print">${!entregado?`<button class="btn btn-red btn-sm" onclick="removeItem('mano',${i})">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="3" class="empty" style="padding:8px">Sin mano de obra registrada</td></tr>'}
       </tbody></table>
       ${!entregado?`<div class="inline-form mt-8">
-        <input id="mo-desc" placeholder="Descripción trabajo">
-        <input id="mo-precio" type="number" placeholder="Precio" style="width:120px">
+        <input id="mo-desc" placeholder="Descripción del trabajo">
+        <input id="mo-precio" type="number" placeholder="Precio $" style="width:130px">
         <button class="btn btn-pri btn-sm" onclick="addMano()">+</button>
       </div>`:''}
     </div>
     <div class="ot-section">
       <div class="ot-section-title">Repuestos Utilizados</div>
       <table><thead><tr><th>Repuesto</th><th>Cant</th><th>Precio</th><th class="no-print"></th></tr></thead>
-      <tbody>${(ot.partes||[]).map((p,i)=>`<tr><td>${p.nom}</td><td>${p.qty}</td><td>${fmt$(p.precio*p.qty)}</td>
-        <td class="no-print"><button class="btn btn-red btn-sm" onclick="removeItem('partes',${i})">✕</button></td></tr>`).join('')||'<tr><td colspan="4" class="empty" style="padding:8px">Sin repuestos</td></tr>'}
+      <tbody>${(ot.partes||[]).map((p,i)=>`<tr><td>${p.nom||'—'}</td><td>${p.qty||0}</td><td>${fmt$(Number(p.precio||0)*Number(p.qty||0))}</td>
+        <td class="no-print">${!entregado?`<button class="btn btn-red btn-sm" onclick="removeItem('partes',${i})">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="4" class="empty" style="padding:8px">Sin repuestos registrados</td></tr>'}
       </tbody></table>
       ${!entregado?`<div class="inline-form mt-8">
-        <select id="rep-sel" style="flex:2">${D.reps.map(r=>`<option value="${r.id}">${r.nom} (Stock:${r.stock})</option>`).join('')}</select>
-        <input id="rep-qty" type="number" value="1" min="1" style="width:60px">
+        <select id="rep-sel" style="flex:2">${D.reps.map(r=>`<option value="${r.id}">${r.nom} (Stock: ${r.stock})</option>`).join('')}</select>
+        <input id="rep-qty" type="number" value="1" min="1" style="width:65px">
         <button class="btn btn-pri btn-sm" onclick="addParte()">+</button>
       </div>`:''}
     </div>
@@ -728,10 +821,10 @@ function renderOTView(ot){
       <div class="totals-row"><span class="fw-7">TOTAL</span><span class="total-final">${fmt$(total)}</span></div>
     </div>
     <div class="ot-section">
-      <div class="ot-section-title">Notas</div>
+      <div class="ot-section-title">Notas Internas</div>
       ${!entregado?`<textarea id="ot-notas" rows="2" onchange="saveNota()">${ot.notas||''}</textarea>`:`<p class="text-muted">${ot.notas||'Sin notas'}</p>`}
     </div>
-    ${entregado?`<div class="ot-section"><div class="alert" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green)">✓ Entregado el ${ot.fechaEnt||''} · Pago: ${ot.metodoPago||'—'}</div></div>`:''}
+    ${entregado?`<div class="ot-section"><div class="alert" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green)">✓ Entregado el ${isoToDisplay(ot.fechaEnt)} · Pago: ${ot.metodoPago||'—'}</div></div>`:''}
     ${ot.estado==='Listo'&&!entregado?`<div class="no-print"><button class="btn btn-pri w-full" onclick="openPago('${ot.id}')">💰 Registrar Entrega y Pago</button></div>`:''}`;
 }
 
@@ -742,15 +835,21 @@ function changeEstado(id,est){
 }
 function addMano(){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
-  const desc=document.getElementById('mo-desc').value.trim();
-  const precio=Number(document.getElementById('mo-precio').value);
-  if(!desc||!precio){alert('Descripción y precio requeridos');return;}
+  const descEl=document.getElementById('mo-desc');
+  const precioEl=document.getElementById('mo-precio');
+  if(!descEl||!precioEl) return;
+  const desc=descEl.value.trim();
+  const precio=Number(precioEl.value);
+  if(!desc||!precio||isNaN(precio)){alert('Descripción y precio (mayor a 0) son requeridos');return;}
   ot.mano.push({desc,precio});save();renderOTView(ot);
 }
 function addParte(){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
-  const repId=document.getElementById('rep-sel').value;
-  const qty=Number(document.getElementById('rep-qty').value)||1;
+  const selEl=document.getElementById('rep-sel');
+  const qtyEl=document.getElementById('rep-qty');
+  if(!selEl||!qtyEl) return;
+  const repId=selEl.value;
+  const qty=Math.max(1,Number(qtyEl.value)||1);
   const rep=D.reps.find(r=>r.id===repId);if(!rep)return;
   if(rep.stock<qty){
     showToast(`⚠ Stock insuficiente para "${rep.nom}". Disponible: ${rep.stock}, solicitado: ${qty}.`,'warn');
@@ -763,21 +862,29 @@ function addParte(){
 function removeItem(tipo,idx){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
   if(tipo==='partes'){
-    const p=ot.partes[idx];const rep=D.reps.find(r=>r.id===p.repId);
-    if(rep) rep.stock+=Number(p.qty);
+    const p=ot.partes[idx];
+    if(p){
+      const rep=D.reps.find(r=>r.id===p.repId);
+      if(rep) rep.stock+=Number(p.qty||0);
+    }
   }
-  ot[tipo].splice(idx,1);save();renderOTView(ot);
+  if(ot[tipo]) ot[tipo].splice(idx,1);
+  save();renderOTView(ot);
 }
 function saveNota(){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
-  ot.notas=document.getElementById('ot-notas').value;save();
+  const el=document.getElementById('ot-notas');
+  if(el) ot.notas=el.value;
+  save();
 }
 function printOT(){
+  if(!curOTId) return;
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
   const total=calcTotal(ot);
-  const manoTotal=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0);
-  const partesTotal=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0);
+  const manoTotal=(ot.mano||[]).reduce((s,x)=>s+Number(x.precio||0),0);
+  const partesTotal=(ot.partes||[]).reduce((s,x)=>s+Number(x.precio||0)*Number(x.qty||0),0);
   const win=window.open('','_blank');
+  if(!win) return;
   win.document.write(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${ot.num}</title>
   <style>
     body{font-family:Arial,sans-serif;font-size:12px;color:#111;padding:24px;max-width:720px;margin:0 auto}
@@ -800,33 +907,33 @@ function printOT(){
   </style></head><body>
   <div class="header">
     <div><div class="logo">⚙ Aura Auto</div><div class="sub">by Yusta Labs</div></div>
-    <div style="text-align:right"><div class="ot-num">${ot.num}</div><div class="sub">Fecha: ${ot.fecha}</div></div>
+    <div style="text-align:right"><div class="ot-num">${ot.num}</div><div class="sub">Fecha: ${isoToDisplay(ot.fecha)}</div></div>
   </div>
   <div class="info-grid">
-    <div><div class="lbl">Cliente</div><b>${ot.cliente}</b></div>
+    <div><div class="lbl">Cliente</div><b>${ot.cliente||'—'}</b></div>
     <div><div class="lbl">Teléfono</div>${ot.tel||'—'}</div>
-    <div><div class="lbl">Patente</div><b>${ot.patente}</b></div>
-    <div><div class="lbl">Vehículo</div>${ot.marca||''} ${ot.modelo||''} ${ot.anio||''}</div>
-    <div><div class="lbl">Kilómetros</div>${ot.km?Number(ot.km).toLocaleString('es-CL')+' km':'—'}</div>
+    <div><div class="lbl">Patente</div><b>${ot.patente||'—'}</b></div>
+    <div><div class="lbl">Vehículo</div>${[ot.marca,ot.modelo,ot.anio].filter(Boolean).join(' ')||'—'}</div>
+    <div><div class="lbl">Kilómetros</div>${ot.km?Number(ot.km).toLocaleString('es-AR')+' km':'—'}</div>
     <div><div class="lbl">Técnico</div>${getTecNom(ot.tecId)}</div>
-    <div style="grid-column:1/-1"><div class="lbl">Motivo / Descripción</div>${ot.motivo}</div>
+    <div style="grid-column:1/-1"><div class="lbl">Motivo / Descripción</div>${ot.motivo||'—'}</div>
   </div>
   <h3 style="margin:10px 0 4px;font-size:13px">Mano de Obra</h3>
   <table><thead><tr><th>Descripción</th><th style="text-align:right">Precio</th></tr></thead><tbody>
-  ${(ot.mano||[]).map(m=>`<tr><td>${m.desc}</td><td style="text-align:right">${fmt$(m.precio)}</td></tr>`).join('')||'<tr><td colspan="2" style="color:#999">Sin mano de obra</td></tr>'}
+  ${(ot.mano||[]).map(m=>`<tr><td>${m.desc||'—'}</td><td style="text-align:right">${fmt$(m.precio)}</td></tr>`).join('')||'<tr><td colspan="2" style="color:#999">Sin mano de obra</td></tr>'}
   </tbody></table>
   <h3 style="margin:10px 0 4px;font-size:13px">Repuestos</h3>
   <table><thead><tr><th>Repuesto</th><th style="text-align:center">Cant.</th><th style="text-align:right">Precio</th></tr></thead><tbody>
-  ${(ot.partes||[]).map(p=>`<tr><td>${p.nom}</td><td style="text-align:center">${p.qty}</td><td style="text-align:right">${fmt$(p.precio*p.qty)}</td></tr>`).join('')||'<tr><td colspan="3" style="color:#999">Sin repuestos</td></tr>'}
+  ${(ot.partes||[]).map(p=>`<tr><td>${p.nom||'—'}</td><td style="text-align:center">${p.qty||0}</td><td style="text-align:right">${fmt$(Number(p.precio||0)*Number(p.qty||0))}</td></tr>`).join('')||'<tr><td colspan="3" style="color:#999">Sin repuestos</td></tr>'}
   </tbody></table>
   <div class="totals">
     <div class="tot-row"><span>Mano de obra</span><span>${fmt$(manoTotal)}</span></div>
     <div class="tot-row"><span>Repuestos</span><span>${fmt$(partesTotal)}</span></div>
     <div class="tot-row tot-final"><span>TOTAL</span><span>${fmt$(total)}</span></div>
   </div>
-  ${ot.warrantyDays?`<p style="margin-top:12px;font-size:11px;color:#666">Garantía: ${ot.warrantyDays} días (hasta ${ot.warrantyExpiry})</p>`:''}
+  ${ot.warrantyDays?`<p style="margin-top:12px;font-size:11px;color:#666">Garantía: ${ot.warrantyDays} días (hasta ${isoToDisplay(ot.warrantyExpiry)})</p>`:''}
   ${ot.notas?`<p style="margin-top:8px;font-size:11px"><b>Notas:</b> ${ot.notas}</p>`:''}
-  <div class="sig"><div class="sig-line">Firma del cliente<br>${ot.cliente}</div></div>
+  <div class="sig"><div class="sig-line">Firma del cliente<br>${ot.cliente||''}</div></div>
   <script>window.onload=()=>window.print();<\/script>
   </body></html>`);
   win.document.close();
@@ -837,7 +944,9 @@ function openPago(id){
   curOTId=id;
   const ot=D.ots.find(o=>o.id===id);if(!ot)return;
   const total=calcTotal(ot);
-  document.getElementById('pago-body').innerHTML=`
+  const pagoBody=document.getElementById('pago-body');
+  if(!pagoBody) return;
+  pagoBody.innerHTML=`
     <div class="mb-12"><span class="text-muted">Total a cobrar:</span> <span class="total-final">${fmt$(total)}</span></div>
     <div class="form-grid" style="grid-template-columns:1fr">
       <div class="form-group"><label>Método de Pago</label>
@@ -850,6 +959,7 @@ function openPago(id){
           <option value="30">30 días</option>
           <option value="60">60 días</option>
           <option value="90">90 días</option>
+          <option value="180">6 meses</option>
         </select>
       </div>
     </div>`;
@@ -857,42 +967,60 @@ function openPago(id){
 }
 function confirmarPago(){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
+  const metodoEl=document.getElementById('pago-metodo');
+  const kmEl=document.getElementById('pago-km');
+  const garantiaEl=document.getElementById('pago-garantia');
   ot.estado='Entregado';
   ot.fechaEnt=today();
-  ot.metodoPago=document.getElementById('pago-metodo').value;
-  ot.kmEnt=document.getElementById('pago-km').value;
-  // Warranty
-  const garantiaDias=Number(document.getElementById('pago-garantia').value)||0;
+  ot.metodoPago=metodoEl?metodoEl.value:'Efectivo';
+  ot.kmEnt=kmEl?kmEl.value:ot.km;
+  const garantiaDias=garantiaEl?Number(garantiaEl.value)||0:0;
   if(garantiaDias>0){
-    const exp=new Date();exp.setDate(exp.getDate()+garantiaDias);
     ot.warrantyDays=garantiaDias;
-    ot.warrantyExpiry=fmtDate(exp);
+    ot.warrantyExpiry=isoOffset(garantiaDias);
   } else {
     ot.warrantyDays=0;ot.warrantyExpiry=null;
   }
-  // registrar en caja
   D.caja.push({id:uid(),tipo:'ingreso',desc:`${ot.num} — ${ot.cliente}`,
-    mano:(ot.mano||[]).reduce((s,x)=>s+Number(x.precio),0),
-    partes:(ot.partes||[]).reduce((s,x)=>s+Number(x.precio)*Number(x.qty),0),
+    mano:(ot.mano||[]).reduce((s,x)=>s+Number(x.precio||0),0),
+    partes:(ot.partes||[]).reduce((s,x)=>s+Number(x.precio||0)*Number(x.qty||0),0),
     metodo:ot.metodoPago,fecha:today()});
   save();closeModal('modal-pago');renderOTView(ot);renderDash();
 }
 
 // ===== HISTORIAL =====
+function renderHistKPIs(){
+  const kpisEl=document.getElementById('hist-kpis');
+  if(!kpisEl) return;
+  const totalVehiculos=new Set(D.ots.map(o=>o.patente)).size;
+  const totalOTs=D.ots.length;
+  const entregadas=D.ots.filter(o=>o.estado==='Entregado');
+  const ingresoTotal=entregadas.reduce((s,o)=>s+calcTotal(o),0);
+  const ticketProm=entregadas.length>0?Math.round(ingresoTotal/entregadas.length):0;
+  kpisEl.innerHTML=`
+    <div class="kpi"><div class="kpi-val">${totalVehiculos}</div><div class="kpi-lbl">Vehículos Únicos</div></div>
+    <div class="kpi"><div class="kpi-val">${totalOTs}</div><div class="kpi-lbl">Total OTs Registradas</div></div>
+    <div class="kpi"><div class="kpi-val text-green" style="font-size:20px">${fmt$(ingresoTotal)}</div><div class="kpi-lbl">Ingresos Acumulados</div></div>
+    <div class="kpi"><div class="kpi-val" style="font-size:20px">${fmt$(ticketProm)}</div><div class="kpi-lbl">Ticket Promedio</div></div>`;
+}
+
 function searchHist(){
-  const q=(document.getElementById('hist-search')||{value:''}).value.trim().toUpperCase();
+  const searchEl=document.getElementById('hist-search');
   const el=document.getElementById('hist-results');
-  if(!q){el.innerHTML='<div class="empty">Ingrese una patente para buscar</div>';return;}
-  const ots=D.ots.filter(o=>o.patente.includes(q)).sort((a,b)=>b.fecha.localeCompare(a.fecha));
-  if(!ots.length){el.innerHTML='<div class="empty">No se encontraron registros para "'+q+'"</div>';return;}
+  if(!el) return;
+  const q=searchEl?searchEl.value.trim().toUpperCase():'';
+  if(!q){el.innerHTML='<div class="empty">Ingresá una patente para ver el historial del vehículo</div>';return;}
+  const ots=D.ots.filter(o=>o.patente&&o.patente.includes(q)).sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
+  if(!ots.length){el.innerHTML=`<div class="empty">No se encontraron registros para la patente "${q}"</div>`;return;}
   const last=ots[0];
+  const ultimoKm=last.kmEnt||last.km;
   el.innerHTML=`<div class="card mb-12">
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-      <div><div class="text-muted text-sm">Patente</div><div class="fw-7 text-pri" style="font-size:18px">${q}</div></div>
-      <div><div class="text-muted text-sm">Vehículo</div><div class="fw-7">${last.marca||''} ${last.modelo||''} ${last.anio||''}</div></div>
-      <div><div class="text-muted text-sm">Último km reg.</div><div class="fw-7">${last.kmEnt?Number(last.kmEnt).toLocaleString('es-CL')+' km':last.km?Number(last.km).toLocaleString('es-CL')+' km':'—'}</div></div>
-      <div><div class="text-muted text-sm">Propietario</div><div>${last.cliente}</div></div>
-      <div><div class="text-muted text-sm">Última visita</div><div>${last.fecha}</div></div>
+      <div><div class="text-muted text-sm">Patente</div><div class="fw-7 text-pri" style="font-size:18px">${last.patente||q}</div></div>
+      <div><div class="text-muted text-sm">Vehículo</div><div class="fw-7">${[last.marca,last.modelo,last.anio].filter(Boolean).join(' ')||'—'}</div></div>
+      <div><div class="text-muted text-sm">Último km registrado</div><div class="fw-7">${ultimoKm?Number(ultimoKm).toLocaleString('es-AR')+' km':'—'}</div></div>
+      <div><div class="text-muted text-sm">Propietario</div><div>${last.cliente||'—'}</div></div>
+      <div><div class="text-muted text-sm">Última visita</div><div>${isoToDisplay(last.fecha)}</div></div>
       <div><div class="text-muted text-sm">Total visitas</div><div>${ots.length}</div></div>
     </div>
   </div>
@@ -900,10 +1028,10 @@ function searchHist(){
     <table><thead><tr><th>N° OT</th><th>Fecha</th><th>Motivo</th><th>Km</th><th>Estado</th><th>Total</th></tr></thead>
     <tbody>${ots.map(o=>{
       const enGarantia=o.warrantyExpiry&&o.warrantyExpiry>=today();
-      const garantiaBadge=enGarantia?`<span class="badge" style="background:rgba(34,197,94,.15);color:#22C55E;margin-left:4px;">En Garantía hasta ${o.warrantyExpiry}</span>`:'';
+      const garantiaBadge=enGarantia?`<span class="badge" style="background:rgba(34,197,94,.15);color:#22C55E;margin-left:4px;">En garantía hasta ${isoToDisplay(o.warrantyExpiry)}</span>`:'';
       return`<tr class="clickable" onclick="viewOT('${o.id}')">
-        <td class="text-pri fw-7">${o.num}</td><td>${o.fecha}</td><td>${o.motivo}</td>
-        <td>${o.km?Number(o.km).toLocaleString('es-CL')+' km':'—'}</td>
+        <td class="text-pri fw-7">${o.num||'—'}</td><td>${isoToDisplay(o.fecha)}</td><td>${o.motivo||'—'}</td>
+        <td>${o.km?Number(o.km).toLocaleString('es-AR')+' km':'—'}</td>
         <td>${badgeEst(o.estado)}${garantiaBadge}</td><td>${fmt$(calcTotal(o))}</td>
       </tr>`;
     }).join('')}</tbody></table>
@@ -913,47 +1041,67 @@ function searchHist(){
 // ===== REPUESTOS =====
 let editRepId=null;
 function renderReps(){
-  const alerts=D.reps.filter(r=>r.stock<=(r.stockMin!=null?r.stockMin:r.min!=null?r.min:2));
-  document.getElementById('rep-alerts').innerHTML=alerts.length?`<div class="alert alert-red mb-12">⚠ ${alerts.length} repuesto(s) en stock crítico: ${alerts.map(r=>r.nom).join(', ')}</div>`:'';
-  const q=(document.getElementById('rep-search')||{value:''}).value.toLowerCase();
-  const list=D.reps.filter(r=>!q||`${r.cod}${r.nom}${r.cat}`.toLowerCase().includes(q));
-  document.getElementById('rep-list').innerHTML=list.length?list.map(r=>`<tr>
-    <td class="text-muted text-sm">${r.cod}</td><td>${r.nom}<br><span class="text-muted text-sm">${r.marca}</span></td>
-    <td class="hide-m"><span class="tag">${r.cat}</span></td>
-    <td><span class="${r.stock<=r.min?'text-red fw-7':''}">${r.stock}</span></td>
-    <td class="text-muted">${r.min}</td>
-    <td class="hide-m text-muted">${fmt$(r.pcosto)}</td>
-    <td>${fmt$(r.pventa)}</td>
-    <td>
-      <button class="btn btn-ghost btn-sm" onclick="openEntrada('${r.id}')">+stock</button>
-      <button class="btn btn-ghost btn-sm" onclick="openRepModal('${r.id}')">✏</button>
-      <button class="btn btn-red btn-sm" onclick="delRep('${r.id}')">✕</button>
-    </td>
-  </tr>`).join(''):`<tr><td colspan="8" class="empty">Sin repuestos</td></tr>`;
+  const alerts=D.reps.filter(r=>Number(r.stock)<=Number(r.min||0));
+  const repAlertsEl=document.getElementById('rep-alerts');
+  if(repAlertsEl){
+    repAlertsEl.innerHTML=alerts.length?`<div class="alert alert-red mb-12">⚠ ${alerts.length} repuesto(s) en stock crítico: ${alerts.map(r=>r.nom).join(', ')}</div>`:'';
+  }
+  const searchEl=document.getElementById('rep-search');
+  const q=searchEl?searchEl.value.toLowerCase():'';
+  const list=D.reps.filter(r=>!q||`${r.cod||''}${r.nom||''}${r.cat||''}`.toLowerCase().includes(q));
+  const repList=document.getElementById('rep-list');
+  if(repList){
+    repList.innerHTML=list.length?list.map(r=>`<tr>
+      <td class="text-muted text-sm">${r.cod||'—'}</td>
+      <td>${r.nom||'—'}<br><span class="text-muted text-sm">${r.marca||''}</span></td>
+      <td class="hide-m"><span class="tag">${r.cat||'—'}</span></td>
+      <td><span class="${Number(r.stock)<=Number(r.min||0)?'text-red fw-7':''}">${r.stock}</span></td>
+      <td class="text-muted">${r.min}</td>
+      <td class="hide-m text-muted">${fmt$(r.pcosto)}</td>
+      <td>${fmt$(r.pventa)}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="openEntrada('${r.id}')">+stock</button>
+        <button class="btn btn-ghost btn-sm" onclick="openRepModal('${r.id}')">✏</button>
+        <button class="btn btn-red btn-sm" onclick="delRep('${r.id}')">✕</button>
+      </td>
+    </tr>`).join(''):`<tr><td colspan="8" class="empty">Sin repuestos</td></tr>`;
+  }
 }
 function openRepModal(id){
   editRepId=id||null;
-  document.getElementById('mrep-title').textContent=id?'Editar Repuesto':'Nuevo Repuesto';
+  const titleEl=document.getElementById('mrep-title');
+  if(titleEl) titleEl.textContent=id?'Editar Repuesto':'Nuevo Repuesto';
   const rep=id?D.reps.find(r=>r.id===id):null;
-  ['rep-cod','rep-nom','rep-marca','rep-stock','rep-min','rep-pcosto','rep-pventa'].forEach(fid=>{
-    const field=fid.replace('rep-','');
-    document.getElementById(fid).value=rep?rep[field==='cod'?'cod':field==='nom'?'nom':field==='pcosto'?'pcosto':field==='pventa'?'pventa':field]||'':'';
-  });
-  if(rep) document.getElementById('rep-cat').value=rep.cat||'Motor';
+  const setVal=(elId,val)=>{const el=document.getElementById(elId);if(el)el.value=val!=null?val:'';};
+  setVal('rep-cod',rep?rep.cod:'');
+  setVal('rep-nom',rep?rep.nom:'');
+  setVal('rep-marca',rep?rep.marca:'');
+  setVal('rep-stock',rep?rep.stock:'');
+  setVal('rep-min',rep?rep.min:'');
+  setVal('rep-pcosto',rep?rep.pcosto:'');
+  setVal('rep-pventa',rep?rep.pventa:'');
+  const catEl=document.getElementById('rep-cat');
+  if(catEl&&rep) catEl.value=rep.cat||'Motor';
   openModal('modal-rep');
 }
 function saveRep(){
-  const cod=document.getElementById('rep-cod').value.trim();
-  const nom=document.getElementById('rep-nom').value.trim();
-  if(!cod||!nom){alert('Código y nombre requeridos');return;}
-  const obj={cod,nom,marca:document.getElementById('rep-marca').value,
-    cat:document.getElementById('rep-cat').value,
-    stock:Number(document.getElementById('rep-stock').value)||0,
-    min:Number(document.getElementById('rep-min').value)||0,
-    pcosto:Number(document.getElementById('rep-pcosto').value)||0,
-    pventa:Number(document.getElementById('rep-pventa').value)||0};
-  if(editRepId){Object.assign(D.reps.find(r=>r.id===editRepId),obj);}
-  else{D.reps.push({id:uid(),...obj});}
+  const codEl=document.getElementById('rep-cod');
+  const nomEl=document.getElementById('rep-nom');
+  if(!codEl||!nomEl) return;
+  const cod=codEl.value.trim();
+  const nom=nomEl.value.trim();
+  if(!cod||!nom){alert('Código y nombre son requeridos');return;}
+  const getNum=id=>{const el=document.getElementById(id);return Number(el?el.value:0)||0;};
+  const getStr=id=>{const el=document.getElementById(id);return el?el.value:'';};
+  const obj={cod,nom,marca:getStr('rep-marca'),cat:getStr('rep-cat'),
+    stock:getNum('rep-stock'),min:getNum('rep-min'),
+    pcosto:getNum('rep-pcosto'),pventa:getNum('rep-pventa')};
+  if(editRepId){
+    const rep=D.reps.find(r=>r.id===editRepId);
+    if(rep) Object.assign(rep,obj);
+  } else {
+    D.reps.push({id:uid(),...obj});
+  }
   save();closeModal('modal-rep');renderReps();
 }
 function delRep(id){
@@ -965,34 +1113,47 @@ function delRep(id){
 
 let entRepId=null;
 function openEntrada(id){
-  entRepId=id;const rep=D.reps.find(r=>r.id===id);
-  document.getElementById('ent-nom').value=rep.nom;
-  document.getElementById('ent-qty').value=1;
+  entRepId=id;
+  const rep=D.reps.find(r=>r.id===id);
+  if(!rep) return;
+  const nomEl=document.getElementById('ent-nom');
+  const qtyEl=document.getElementById('ent-qty');
+  if(nomEl) nomEl.value=rep.nom;
+  if(qtyEl) qtyEl.value=1;
   openModal('modal-entrada');
 }
 function confirmarEntrada(){
   const rep=D.reps.find(r=>r.id===entRepId);if(!rep)return;
-  rep.stock+=Number(document.getElementById('ent-qty').value)||1;
+  const qtyEl=document.getElementById('ent-qty');
+  const qty=qtyEl?Number(qtyEl.value)||1:1;
+  if(qty<1){alert('La cantidad debe ser mayor a 0');return;}
+  rep.stock+=qty;
   save();closeModal('modal-entrada');renderReps();
+  showToast(`+${qty} unidades de "${rep.nom}" ingresadas al stock`,'info');
 }
 
 // ===== CLIENTES & TÉCNICOS =====
 let editCliId=null,editTecId=null;
 function switchCT(which,el){
   document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('ct-cli').style.display=which==='cli'?'block':'none';
-  document.getElementById('ct-tec').style.display=which==='tec'?'block':'none';
+  if(el) el.classList.add('active');
+  const cliEl=document.getElementById('ct-cli');
+  const tecEl=document.getElementById('ct-tec');
+  if(cliEl) cliEl.style.display=which==='cli'?'block':'none';
+  if(tecEl) tecEl.style.display=which==='tec'?'block':'none';
 }
 function renderCT(){renderCli();renderTec();}
 function renderCli(){
-  document.getElementById('cli-count').textContent=`${D.clientes.length} clientes`;
-  document.getElementById('cli-list').innerHTML=D.clientes.map(c=>{
+  const countEl=document.getElementById('cli-count');
+  if(countEl) countEl.textContent=`${D.clientes.length} clientes`;
+  const listEl=document.getElementById('cli-list');
+  if(!listEl) return;
+  listEl.innerHTML=D.clientes.map(c=>{
     const ots=D.ots.filter(o=>o.cliente===c.nom);
     const pats=[...new Set(ots.map(o=>o.patente))];
     return`<div class="card">
       <div class="flex justify-between items-center mb-4">
-        <div><span class="fw-7">${c.nom}</span> <span class="text-muted text-sm">${c.rut||''}</span></div>
+        <div><span class="fw-7">${c.nom||'—'}</span> <span class="text-muted text-sm">${c.rut||''}</span></div>
         <div class="flex gap-4">
           ${c.cc?`<span class="badge badge-red">CC: ${fmt$(c.cc)}</span>`:''}
           <button class="btn btn-ghost btn-sm" onclick="openCliModal('${c.id}')">✏</button>
@@ -1001,43 +1162,64 @@ function renderCli(){
       </div>
       <div class="flex gap-8" style="flex-wrap:wrap;font-size:12px;color:var(--muted)">
         <span>📞 ${c.tel||'—'}</span><span>✉ ${c.email||'—'}</span>
-        <span>🚗 ${pats.length?pats.map(p=>`<span class="tag">${p}</span>`).join(''):'sin vehículos'}</span>
-        <span>📋 ${ots.length} OTs</span>
+        <span>🚗 ${pats.length?pats.map(p=>`<span class="tag">${p}</span>`).join(''):'sin vehículos registrados'}</span>
+        <span>📋 ${ots.length} OT${ots.length!==1?'s':''}</span>
       </div>
     </div>`;
-  }).join('')||'<div class="empty">Sin clientes</div>';
+  }).join('')||'<div class="empty">Sin clientes registrados</div>';
 }
 function openCliModal(id){
   editCliId=id||null;
-  document.getElementById('mcli-title').textContent=id?'Editar Cliente':'Nuevo Cliente';
+  const titleEl=document.getElementById('mcli-title');
+  if(titleEl) titleEl.textContent=id?'Editar Cliente':'Nuevo Cliente';
   const c=id?D.clientes.find(x=>x.id===id):null;
-  document.getElementById('cli-nom').value=c?c.nom:'';
-  document.getElementById('cli-tel').value=c?c.tel:'';
-  document.getElementById('cli-email').value=c?c.email:'';
-  document.getElementById('cli-rut').value=c?c.rut:'';
-  document.getElementById('cli-cc').value=c?c.cc:0;
+  const setVal=(elId,val)=>{const el=document.getElementById(elId);if(el)el.value=val!=null?val:'';};
+  setVal('cli-nom',c?c.nom:'');
+  setVal('cli-tel',c?c.tel:'');
+  setVal('cli-email',c?c.email:'');
+  setVal('cli-rut',c?c.rut:'');
+  setVal('cli-cc',c?c.cc:0);
   openModal('modal-cli');
 }
 function saveCli(){
-  const nom=document.getElementById('cli-nom').value.trim();
+  const nomEl=document.getElementById('cli-nom');
+  if(!nomEl) return;
+  const nom=nomEl.value.trim();
   if(!nom){alert('Nombre requerido');return;}
-  const obj={nom,tel:document.getElementById('cli-tel').value,email:document.getElementById('cli-email').value,
-    rut:document.getElementById('cli-rut').value,cc:Number(document.getElementById('cli-cc').value)||0};
-  if(editCliId){Object.assign(D.clientes.find(c=>c.id===editCliId),obj);}
-  else{D.clientes.push({id:uid(),...obj});}
+  const getStr=id=>{const el=document.getElementById(id);return el?el.value:'';};
+  const obj={nom,tel:getStr('cli-tel'),email:getStr('cli-email'),
+    rut:getStr('cli-rut'),cc:Number(getStr('cli-cc'))||0};
+  if(editCliId){
+    const c=D.clientes.find(x=>x.id===editCliId);
+    if(c) Object.assign(c,obj);
+  } else {
+    D.clientes.push({id:uid(),...obj});
+  }
   save();closeModal('modal-cli');renderCli();
 }
-function delCli(id){if(!confirm('¿Eliminar cliente?'))return;D.clientes=D.clientes.filter(c=>c.id!==id);save();renderCli();}
+function delCli(id){
+  const otCount=D.ots.filter(o=>o.cliente===(D.clientes.find(c=>c.id===id)||{}).nom).length;
+  if(otCount>0){
+    if(!confirm(`Este cliente tiene ${otCount} orden${otCount!==1?'es':''} registrada${otCount!==1?'s':''}. ¿Eliminar igualmente?`)) return;
+  } else {
+    if(!confirm('¿Eliminar cliente?')) return;
+  }
+  D.clientes=D.clientes.filter(c=>c.id!==id);save();renderCli();
+}
 
 function renderTec(){
-  document.getElementById('tec-count').textContent=`${D.tecnicos.length} técnicos`;
-  document.getElementById('tec-list').innerHTML=D.tecnicos.map(t=>{
-    const ots=D.ots.filter(o=>o.tecId===t.id&&o.estado==='Entregado'&&o.fechaEnt===today());
-    const totalMes=D.ots.filter(o=>o.tecId===t.id&&o.estado==='Entregado').reduce((s,o)=>s+calcTotal(o),0);
-    const comision=Math.round(totalMes*(t.com/100));
+  const countEl=document.getElementById('tec-count');
+  if(countEl) countEl.textContent=`${D.tecnicos.length} técnicos`;
+  const listEl=document.getElementById('tec-list');
+  if(!listEl) return;
+  listEl.innerHTML=D.tecnicos.map(t=>{
+    const otsHoy=D.ots.filter(o=>o.tecId===t.id&&o.estado==='Entregado'&&o.fechaEnt===today());
+    const entregadas=D.ots.filter(o=>o.tecId===t.id&&o.estado==='Entregado');
+    const totalFacturado=entregadas.reduce((s,o)=>s+calcTotal(o),0);
+    const comision=totalFacturado>0?Math.round(totalFacturado*((t.com||0)/100)):0;
     return`<div class="card">
       <div class="flex justify-between items-center mb-4">
-        <div><span class="fw-7">${t.nom}</span> <span class="tag">${t.esp}</span></div>
+        <div><span class="fw-7">${t.nom||'—'}</span> <span class="tag">${t.esp||'—'}</span></div>
         <div class="flex gap-4">
           <button class="btn btn-ghost btn-sm" onclick="openTecModal('${t.id}')">✏</button>
           <button class="btn btn-red btn-sm" onclick="delTec('${t.id}')">✕</button>
@@ -1045,31 +1227,39 @@ function renderTec(){
       </div>
       <div class="flex gap-8" style="flex-wrap:wrap;font-size:12px;color:var(--muted)">
         <span>📞 ${t.tel||'—'}</span>
-        <span>Comisión: <b class="text-pri">${t.com}%</b></span>
-        <span>OTs hoy: <b>${ots.length}</b></span>
-        <span>Facturado acum.: <b>${fmt$(totalMes)}</b></span>
-        <span>Liquidación: <b class="text-green">${fmt$(comision)}</b></span>
+        <span>Comisión: <b class="text-pri">${t.com||0}%</b></span>
+        <span>OTs entregadas hoy: <b>${otsHoy.length}</b></span>
+        <span>Facturado acumulado: <b>${fmt$(totalFacturado)}</b></span>
+        <span>Comisión estimada: <b class="text-green">${fmt$(comision)}</b></span>
       </div>
     </div>`;
-  }).join('')||'<div class="empty">Sin técnicos</div>';
+  }).join('')||'<div class="empty">Sin técnicos registrados</div>';
 }
 function openTecModal(id){
   editTecId=id||null;
-  document.getElementById('mtec-title').textContent=id?'Editar Técnico':'Nuevo Técnico';
+  const titleEl=document.getElementById('mtec-title');
+  if(titleEl) titleEl.textContent=id?'Editar Técnico':'Nuevo Técnico';
   const t=id?D.tecnicos.find(x=>x.id===id):null;
-  document.getElementById('tec-nom').value=t?t.nom:'';
-  document.getElementById('tec-esp').value=t?t.esp:'';
-  document.getElementById('tec-tel').value=t?t.tel:'';
-  document.getElementById('tec-com').value=t?t.com:10;
+  const setVal=(elId,val)=>{const el=document.getElementById(elId);if(el)el.value=val!=null?val:'';};
+  setVal('tec-nom',t?t.nom:'');
+  setVal('tec-esp',t?t.esp:'');
+  setVal('tec-tel',t?t.tel:'');
+  setVal('tec-com',t?t.com:10);
   openModal('modal-tec');
 }
 function saveTec(){
-  const nom=document.getElementById('tec-nom').value.trim();
+  const nomEl=document.getElementById('tec-nom');
+  if(!nomEl) return;
+  const nom=nomEl.value.trim();
   if(!nom){alert('Nombre requerido');return;}
-  const obj={nom,esp:document.getElementById('tec-esp').value,tel:document.getElementById('tec-tel').value,
-    com:Number(document.getElementById('tec-com').value)||0};
-  if(editTecId){Object.assign(D.tecnicos.find(t=>t.id===editTecId),obj);}
-  else{D.tecnicos.push({id:uid(),...obj});}
+  const getStr=id=>{const el=document.getElementById(id);return el?el.value:'';};
+  const obj={nom,esp:getStr('tec-esp'),tel:getStr('tec-tel'),com:Number(getStr('tec-com'))||0};
+  if(editTecId){
+    const t=D.tecnicos.find(x=>x.id===editTecId);
+    if(t) Object.assign(t,obj);
+  } else {
+    D.tecnicos.push({id:uid(),...obj});
+  }
   save();closeModal('modal-tec');renderTec();
 }
 function delTec(id){
@@ -1091,11 +1281,13 @@ function renderCaja(){
   const neto=totalIng-totalGastos;
   const metodos=['Efectivo','Transferencia','Débito','Crédito','Cuenta Corriente'];
   const porMetodo=metodos.map(m=>({m,v:pagos.filter(p=>p.metodo===m).reduce((s,p)=>s+Number(p.mano||0)+Number(p.partes||0),0)})).filter(x=>x.v>0);
-  document.getElementById('caja-content').innerHTML=renderLiquidacionTec()+`
+  const cajaEl=document.getElementById('caja-content');
+  if(!cajaEl) return;
+  cajaEl.innerHTML=renderLiquidacionTec()+`
     <div class="caja-grid">
       <div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Resumen del Día</span><span class="text-muted text-sm">${hoy}</span></div>
+          <div class="card-header"><span class="card-title">Resumen del Día</span><span class="text-muted text-sm">${isoToDisplay(hoy)}</span></div>
           <div class="totals-row"><span class="text-muted">Mano de obra</span><span>${fmt$(totalMano)}</span></div>
           <div class="totals-row"><span class="text-muted">Repuestos</span><span>${fmt$(totalPartes)}</span></div>
           <div class="totals-row"><span class="text-muted">Total Ingresos</span><span class="text-green fw-7">${fmt$(totalIng)}</span></div>
@@ -1104,52 +1296,59 @@ function renderCaja(){
         </div>
         <div class="card">
           <div class="card-header"><span class="card-title">Por Método de Pago</span></div>
-          ${porMetodo.length?porMetodo.map(x=>`<div class="metodo-row"><span>${x.m}</span><span class="fw-7">${fmt$(x.v)}</span></div>`).join(''):'<div class="empty" style="padding:12px">Sin ingresos hoy</div>'}
+          ${porMetodo.length?porMetodo.map(x=>`<div class="metodo-row"><span>${x.m}</span><span class="fw-7">${fmt$(x.v)}</span></div>`).join(''):'<div class="empty" style="padding:12px">Sin ingresos registrados hoy</div>'}
         </div>
       </div>
       <div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Ingresos</span></div>
-          <table><thead><tr><th>OT</th><th>Método</th><th>Monto</th></tr></thead>
-          <tbody>${pagos.length?pagos.map(p=>`<tr><td>${p.desc}</td><td>${p.metodo}</td><td class="text-green">${fmt$(Number(p.mano||0)+Number(p.partes||0))}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">Sin ingresos</td></tr>'}
+          <div class="card-header"><span class="card-title">Ingresos del Día</span></div>
+          <table><thead><tr><th>OT / Descripción</th><th>Método</th><th>Monto</th></tr></thead>
+          <tbody>${pagos.length?pagos.map(p=>`<tr><td>${p.desc||'—'}</td><td>${p.metodo||'—'}</td><td class="text-green">${fmt$(Number(p.mano||0)+Number(p.partes||0))}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">Sin ingresos hoy</td></tr>'}
           </tbody></table>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Gastos</span>
+          <div class="card-header"><span class="card-title">Gastos del Día</span>
             <button class="btn btn-ghost btn-sm" onclick="addGasto()">+ Gasto</button>
           </div>
           <table><thead><tr><th>Descripción</th><th>Monto</th><th></th></tr></thead>
-          <tbody>${gastos.length?gastos.map(g=>`<tr><td>${g.desc}</td><td class="text-red">${fmt$(g.monto)}</td>
-            <td><button class="btn btn-red btn-sm" onclick="delGasto('${g.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="3" class="empty">Sin gastos</td></tr>'}
+          <tbody>${gastos.length?gastos.map(g=>`<tr><td>${g.desc||'—'}</td><td class="text-red">${fmt$(g.monto)}</td>
+            <td><button class="btn btn-red btn-sm" onclick="delGasto('${g.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="3" class="empty">Sin gastos registrados hoy</td></tr>'}
           </tbody></table>
         </div>
       </div>
     </div>`;
 }
 function addGasto(){
-  const desc=prompt('Descripción del gasto:');if(!desc)return;
-  const monto=Number(prompt('Monto:'));if(!monto)return;
-  D.caja.push({id:uid(),tipo:'gasto',desc,monto,fecha:today()});
+  const desc=prompt('Descripción del gasto:');
+  if(!desc||!desc.trim()) return;
+  const montoStr=prompt('Monto ($):');
+  const monto=Number(montoStr);
+  if(isNaN(monto)||monto<=0){alert('Ingresá un monto válido mayor a 0');return;}
+  D.caja.push({id:uid(),tipo:'gasto',desc:desc.trim(),monto,fecha:today()});
   save();renderCaja();
 }
-function delGasto(id){D.caja=D.caja.filter(x=>x.id!==id);save();renderCaja();}
+function delGasto(id){
+  if(!confirm('¿Eliminar este gasto?')) return;
+  D.caja=D.caja.filter(x=>x.id!==id);save();renderCaja();
+}
 
 // ===== LIQUIDACIÓN POR TÉCNICO =====
 function renderLiquidacionTec(){
   const mes=today().slice(0,7);
-  const otsMes=D.ots.filter(o=>o.fecha&&o.fecha.startsWith(mes));
+  const otsMes=D.ots.filter(o=>o.fecha&&o.fecha.startsWith(mes)&&o.estado==='Entregado');
   const rows=D.tecnicos.map(t=>{
     const ots=otsMes.filter(o=>o.tecId===t.id);
-    const mano=ots.reduce((s,o)=>(o.mano||[]).reduce((ss,m)=>ss+Number(m.precio),s),0);
-    const partes=ots.reduce((s,o)=>(o.partes||[]).reduce((ss,p)=>ss+Number(p.precio)*Number(p.qty),s),0);
+    const mano=ots.reduce((s,o)=>(o.mano||[]).reduce((ss,m)=>ss+Number(m.precio||0),s),0);
+    const partes=ots.reduce((s,o)=>(o.partes||[]).reduce((ss,p)=>ss+Number(p.precio||0)*Number(p.qty||0),s),0);
     const total=mano+partes;
-    const comision=Math.round(total*(t.com/100));
+    const comision=total>0?Math.round(total*((t.com||0)/100)):0;
     return{nom:t.nom,count:ots.length,mano,partes,total,comision};
   });
-  return`<div class="card" style="margin-top:16px">
-    <div class="card-header"><span class="card-title">Liquidación por Técnico — ${mes}</span></div>
-    <table><thead><tr><th>Técnico</th><th>OTs</th><th>Mano de obra</th><th>Repuestos</th><th>Total</th><th>Comisión</th></tr></thead><tbody>
-    ${rows.map(r=>`<tr><td class="fw-7">${r.nom}</td><td>${r.count}</td><td>${fmt$(r.mano)}</td><td>${fmt$(r.partes)}</td><td class="fw-7">${fmt$(r.total)}</td><td class="text-green">${fmt$(r.comision)}</td></tr>`).join('')}
+  const mesDisplay=mes.split('-').reverse().slice(0,2).reverse().join('/');
+  return`<div class="card" style="margin-bottom:16px">
+    <div class="card-header"><span class="card-title">Liquidación por Técnico — ${mesDisplay}</span></div>
+    <table><thead><tr><th>Técnico</th><th>OTs Entregadas</th><th>Mano de Obra</th><th>Repuestos</th><th>Total Facturado</th><th>Comisión</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td class="fw-7">${r.nom||'—'}</td><td>${r.count}</td><td>${fmt$(r.mano)}</td><td>${fmt$(r.partes)}</td><td class="fw-7">${fmt$(r.total)}</td><td class="text-green">${fmt$(r.comision)}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Sin datos este mes</td></tr>'}
     </tbody></table>
   </div>`;
 }
@@ -1158,10 +1357,10 @@ function renderLiquidacionTec(){
 function getNotificaciones(){
   const notifs=[];
   D.reps.forEach(r=>{
-    if(r.stock<=r.min) notifs.push({msg:`⚠ ${r.nom}: stock crítico (${r.stock}/${r.min})`,tipo:'stock'});
+    if(Number(r.stock)<=Number(r.min||0)) notifs.push({msg:`⚠ ${r.nom}: stock crítico (${r.stock}/${r.min})`,tipo:'stock'});
   });
   D.ots.forEach(o=>{
-    if(o.estado==='Esperando Repuesto') notifs.push({msg:`🔧 OT ${o.num} — ${o.cliente}: esperando repuesto`,tipo:'ot'});
+    if(o.estado==='Esperando Repuesto') notifs.push({msg:`🔧 ${o.num} — ${o.cliente||'Cliente'}: esperando repuesto`,tipo:'ot'});
   });
   return notifs;
 }
@@ -1169,21 +1368,13 @@ function getNotificaciones(){
 function renderNotifBadge(){
   const notifs=getNotificaciones();
   const count=notifs.length;
-  // Sidebar badge
-  const sideItem=document.querySelector('[data-page="reps"]');
-  if(sideItem){
-    const existing=sideItem.querySelector('.notif-badge');
+  ['[data-page="reps"]','[data-bpage="reps"]'].forEach(sel=>{
+    const item=document.querySelector(sel);
+    if(!item) return;
+    const existing=item.querySelector('.notif-badge');
     if(existing) existing.remove();
-    if(count>0){const b=document.createElement('span');b.className='notif-badge';b.textContent=count;sideItem.appendChild(b);}
-  }
-  // Bottom nav badge
-  const bnavItem=document.querySelector('[data-bpage="reps"]');
-  if(bnavItem){
-    const existing=bnavItem.querySelector('.notif-badge');
-    if(existing) existing.remove();
-    if(count>0){const b=document.createElement('span');b.className='notif-badge';b.textContent=count;bnavItem.appendChild(b);}
-  }
-  // Alertas panel in dashboard
+    if(count>0){const b=document.createElement('span');b.className='notif-badge';b.textContent=count;item.appendChild(b);}
+  });
   const panel=document.getElementById('alertas-panel');
   if(panel){
     if(notifs.length===0){panel.innerHTML='';return;}
@@ -1198,15 +1389,14 @@ function renderNotifBadge(){
 function reporteMensual(){
   const mes=prompt('Mes a exportar (YYYY-MM):',today().slice(0,7));
   if(!mes) return;
+  if(!/^\d{4}-\d{2}$/.test(mes)){alert('Formato inválido. Usá YYYY-MM (ej: 2025-04)');return;}
   const otsDelMes=D.ots.filter(o=>o.fecha&&o.fecha.startsWith(mes));
   const cajaDelMes=D.caja.filter(x=>x.fecha&&x.fecha.startsWith(mes));
-  // Sheet 1: OTs del Mes
   const wsData=[['N° OT','Cliente','Patente','Técnico','Estado','Fecha','Total']];
   otsDelMes.forEach(o=>{
-    wsData.push([o.num,o.cliente,o.patente,getTecNom(o.tecId),o.estado,o.fecha,calcTotal(o)]);
+    wsData.push([o.num||'',o.cliente||'',o.patente||'',getTecNom(o.tecId),o.estado||'',isoToDisplay(o.fecha),calcTotal(o)]);
   });
   const ws1=XLSX.utils.aoa_to_sheet(wsData);
-  // Sheet 2: Resumen
   const entregadas=otsDelMes.filter(o=>o.estado==='Entregado');
   const activas=otsDelMes.filter(o=>o.estado!=='Entregado');
   const totalIngresos=entregadas.reduce((s,o)=>s+calcTotal(o),0);
@@ -1224,6 +1414,7 @@ function reporteMensual(){
   XLSX.utils.book_append_sheet(wb,ws1,'OTs del Mes');
   XLSX.utils.book_append_sheet(wb,ws2,'Resumen');
   XLSX.writeFile(wb,`reporte-taller-${mes}.xlsx`);
+  showToast(`Reporte ${mes} exportado exitosamente`,'info');
 }
 
 // ===== TOAST =====
@@ -1232,7 +1423,7 @@ function showToast(msg, type='info', dur=3500){
   if(!t){
     t=document.createElement('div');
     t.id='auto-toast';
-    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:12px 20px;font-size:13px;z-index:400;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;';
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:12px 20px;font-size:13px;z-index:400;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;';
     document.body.appendChild(t);
   }
   t.textContent=msg;
@@ -1244,9 +1435,17 @@ function showToast(msg, type='info', dur=3500){
 }
 
 // ===== MODAL HELPERS =====
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.addEventListener('click',e=>{if(e.target.classList.contains('modal-bg'))closeModal(e.target.id);});
+function openModal(id){
+  const el=document.getElementById(id);
+  if(el) el.classList.add('open');
+}
+function closeModal(id){
+  const el=document.getElementById(id);
+  if(el) el.classList.remove('open');
+}
+document.addEventListener('click',e=>{
+  if(e.target&&e.target.classList.contains('modal-bg')) closeModal(e.target.id);
+});
 
 // ===== INIT =====
 buildNav();
@@ -1254,4 +1453,3 @@ renderDash();
 </script>
 </body>
 </html>
-
