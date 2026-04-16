@@ -828,10 +828,40 @@ function renderOTView(ot){
     ${ot.estado==='Listo'&&!entregado?`<div class="no-print"><button class="btn btn-pri w-full" onclick="openPago('${ot.id}')">💰 Registrar Entrega y Pago</button></div>`:''}`;
 }
 
+// Mapa de transiciones válidas: desde → [hacia...]
+const TRANSICIONES_VALIDAS={
+  'Recibido':['Diagnóstico','Esperando Repuesto','En Reparación'],
+  'Diagnóstico':['Esperando Repuesto','En Reparación','Listo'],
+  'Esperando Repuesto':['En Reparación','Diagnóstico'],
+  'En Reparación':['Listo','Diagnóstico'],
+  'Listo':['Entregado','En Reparación'],
+  'Entregado':[]
+};
 function changeEstado(id,est){
   const ot=D.ots.find(o=>o.id===id);if(!ot)return;
-  if(est==='Entregado'){openPago(id);return;}
+  if(ot.estado===est) return; // sin cambio
+  if(est==='Entregado'){
+    // Solo se puede entregar si está en Listo
+    if(ot.estado!=='Listo'){
+      const permitidos=TRANSICIONES_VALIDAS[ot.estado]||[];
+      if(!permitidos.includes(est)){
+        showToast(`⚠ No se puede pasar de "${ot.estado}" directo a "Entregado". Primero marcá la OT como Listo.`,'warn',4500);
+        return;
+      }
+    }
+    openPago(id);return;
+  }
+  const permitidos=TRANSICIONES_VALIDAS[ot.estado]||[];
+  // Permitir saltar estados hacia atrás para corrección (sin validación estricta)
+  // pero advertir si el salto hacia adelante es muy grande
+  const idxActual=ESTADOS.indexOf(ot.estado);
+  const idxNuevo=ESTADOS.indexOf(est);
+  if(idxNuevo>idxActual+2){
+    const ok=confirm(`¿Confirmar cambio de estado de "${ot.estado}" a "${est}"?\nEsto omite etapas intermedias.`);
+    if(!ok) return;
+  }
   ot.estado=est;save();renderOTView(ot);renderDash();
+  showToast(`Estado actualizado: ${est}`,'info',2500);
 }
 function addMano(){
   const ot=D.ots.find(o=>o.id===curOTId);if(!ot)return;
@@ -1390,31 +1420,89 @@ function reporteMensual(){
   const mes=prompt('Mes a exportar (YYYY-MM):',today().slice(0,7));
   if(!mes) return;
   if(!/^\d{4}-\d{2}$/.test(mes)){alert('Formato inválido. Usá YYYY-MM (ej: 2025-04)');return;}
+  // OTs abiertas ese mes (por fecha inicio)
   const otsDelMes=D.ots.filter(o=>o.fecha&&o.fecha.startsWith(mes));
+  // Entregadas: filtrar por fechaEnt (fecha real de cobro) para ingresos correctos
+  const entregadas=D.ots.filter(o=>o.estado==='Entregado'&&o.fechaEnt&&o.fechaEnt.startsWith(mes));
+  const activas=D.ots.filter(o=>o.estado!=='Entregado'&&o.fecha&&o.fecha.startsWith(mes));
   const cajaDelMes=D.caja.filter(x=>x.fecha&&x.fecha.startsWith(mes));
-  const wsData=[['N° OT','Cliente','Patente','Técnico','Estado','Fecha','Total']];
-  otsDelMes.forEach(o=>{
-    wsData.push([o.num||'',o.cliente||'',o.patente||'',getTecNom(o.tecId),o.estado||'',isoToDisplay(o.fecha),calcTotal(o)]);
-  });
-  const ws1=XLSX.utils.aoa_to_sheet(wsData);
-  const entregadas=otsDelMes.filter(o=>o.estado==='Entregado');
-  const activas=otsDelMes.filter(o=>o.estado!=='Entregado');
   const totalIngresos=entregadas.reduce((s,o)=>s+calcTotal(o),0);
   const totalGastos=cajaDelMes.filter(x=>x.tipo==='gasto').reduce((s,x)=>s+Number(x.monto||0),0);
   const neto=totalIngresos-totalGastos;
-  const ws2=XLSX.utils.aoa_to_sheet([
-    ['Concepto','Valor'],
-    ['Total ingresos del mes',totalIngresos],
-    ['Total gastos',totalGastos],
-    ['Neto',neto],
-    ['OTs entregadas',entregadas.length],
-    ['OTs activas',activas.length]
-  ]);
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws1,'OTs del Mes');
-  XLSX.utils.book_append_sheet(wb,ws2,'Resumen');
-  XLSX.writeFile(wb,`reporte-taller-${mes}.xlsx`);
-  showToast(`Reporte ${mes} exportado exitosamente`,'info');
+  // Técnico con más trabajo ese mes
+  const tecCount={};
+  entregadas.forEach(o=>{if(o.tecId){tecCount[o.tecId]=(tecCount[o.tecId]||0)+1;}});
+  const topTecId=Object.keys(tecCount).sort((a,b)=>tecCount[b]-tecCount[a])[0];
+  const topTecNom=topTecId?getTecNom(topTecId):'—';
+  const topTecOTs=topTecId?tecCount[topTecId]:0;
+  const mesDisplay=mes.split('-').reverse().join('/');
+  // Intentar exportar a Excel; si XLSX no está disponible, mostrar modal resumen
+  if(typeof XLSX!=='undefined'){
+    const wsData=[['N° OT','Cliente','Patente','Técnico','Estado','F. Apertura','F. Entrega','Total']];
+    otsDelMes.forEach(o=>{
+      wsData.push([o.num||'',o.cliente||'',o.patente||'',getTecNom(o.tecId),o.estado||'',
+        isoToDisplay(o.fecha),o.fechaEnt?isoToDisplay(o.fechaEnt):'—',calcTotal(o)]);
+    });
+    const ws1=XLSX.utils.aoa_to_sheet(wsData);
+    const ws2=XLSX.utils.aoa_to_sheet([
+      ['Concepto','Valor'],
+      ['Período',mesDisplay],
+      ['OTs del mes (abiertas)',otsDelMes.length],
+      ['OTs entregadas (cobradas)',entregadas.length],
+      ['OTs activas',activas.length],
+      ['Total ingresos del mes',totalIngresos],
+      ['Total gastos',totalGastos],
+      ['Neto',neto],
+      ['Técnico con más trabajo',`${topTecNom} (${topTecOTs} OTs)`]
+    ]);
+    // Hoja de gastos
+    const gastoRows=[['Descripción','Monto','Fecha']];
+    cajaDelMes.filter(x=>x.tipo==='gasto').forEach(g=>gastoRows.push([g.desc||'—',g.monto,isoToDisplay(g.fecha)]));
+    const ws3=XLSX.utils.aoa_to_sheet(gastoRows);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws1,'OTs del Mes');
+    XLSX.utils.book_append_sheet(wb,ws2,'Resumen');
+    XLSX.utils.book_append_sheet(wb,ws3,'Gastos');
+    XLSX.writeFile(wb,`reporte-taller-${mes}.xlsx`);
+    showToast(`Reporte ${mes} exportado exitosamente`,'info');
+  } else {
+    // Fallback: modal con resumen visual
+    let existing=document.getElementById('modal-reporte');
+    if(existing) existing.remove();
+    const modal=document.createElement('div');
+    modal.id='modal-reporte';
+    modal.className='modal-bg open';
+    modal.innerHTML=`<div class="modal" style="max-width:480px">
+      <div class="modal-header">
+        <div class="modal-title">📊 Reporte Mensual — ${mesDisplay}</div>
+        <button class="modal-close" onclick="document.getElementById('modal-reporte').remove()">×</button>
+      </div>
+      <div style="display:grid;gap:10px;font-size:14px">
+        <div class="card" style="margin:0;padding:12px">
+          <div class="card-title" style="margin-bottom:8px">Resumen Financiero</div>
+          <div class="totals-row"><span class="text-muted">Ingresos (OTs cobradas)</span><span class="text-green fw-7">${fmt$(totalIngresos)}</span></div>
+          <div class="totals-row"><span class="text-muted">Gastos del mes</span><span class="text-red">${fmt$(totalGastos)}</span></div>
+          <div class="totals-row"><span class="fw-7">Neto</span><span class="total-final">${fmt$(neto)}</span></div>
+        </div>
+        <div class="card" style="margin:0;padding:12px">
+          <div class="card-title" style="margin-bottom:8px">Órdenes de Trabajo</div>
+          <div class="totals-row"><span class="text-muted">OTs abiertas en el mes</span><span>${otsDelMes.length}</span></div>
+          <div class="totals-row"><span class="text-muted">Entregadas / cobradas</span><span class="text-green">${entregadas.length}</span></div>
+          <div class="totals-row"><span class="text-muted">Activas (en proceso)</span><span class="text-pri">${activas.length}</span></div>
+        </div>
+        <div class="card" style="margin:0;padding:12px">
+          <div class="card-title" style="margin-bottom:8px">Técnico Destacado</div>
+          <div class="totals-row"><span class="text-muted">Más trabajo</span><span class="fw-7">${topTecNom}</span></div>
+          <div class="totals-row"><span class="text-muted">OTs entregadas</span><span>${topTecOTs}</span></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="document.getElementById('modal-reporte').remove()">Cerrar</button>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  }
 }
 
 // ===== TOAST =====
