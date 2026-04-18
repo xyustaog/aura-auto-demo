@@ -136,6 +136,18 @@ textarea{resize:vertical;min-height:70px}
 .agent-solves{list-style:none;display:flex;flex-direction:column;gap:5px;flex:1;padding:0;margin:0}
 .agent-solves li{font-size:12px;color:var(--text-muted);padding-left:14px;position:relative;line-height:1.45}
 .agent-solves li::before{content:'→';position:absolute;left:0;color:var(--primary);font-weight:700}
+.agent-intro{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:16px 20px;margin-bottom:20px}
+.agent-intro-title{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:4px}
+.agent-intro-sub{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.agent-status{margin-left:auto;background:var(--success-bg);color:var(--success);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.agent-scenario{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.agent-flow{display:flex;flex-direction:column;gap:6px;margin:8px 0;padding:10px 12px;background:var(--surface-2);border-radius:8px}
+.flow-step{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-secondary)}
+.flow-dot{width:18px;height:18px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:1px}
+.flow-dot.detect{background:#E8EEF5;color:#1F3A5F}
+.flow-dot.analyze{background:var(--warning-bg);color:var(--warning)}
+.flow-dot.act{background:var(--success-bg);color:var(--success)}
+@media(max-width:480px){.agents-grid{grid-template-columns:1fr}.agent-header{flex-wrap:wrap;gap:8px}.agent-status{margin-left:0}.agent-card{padding:14px}.agent-flow{padding:8px 10px}.flow-step{font-size:11px}}
 /* Print */
 @media print{#sidebar,#topbar,#bottomnav,.no-print{display:none!important}#main{margin:0!important;padding:0!important}}
 /* Responsive */
@@ -212,6 +224,21 @@ textarea{resize:vertical;min-height:70px}
       <div class="card-header"><span class="card-title">Repuestos Críticos</span></div>
       <table><thead><tr><th>Código</th><th>Nombre</th><th>Stock</th><th>Mínimo</th></tr></thead>
       <tbody id="dash-reps"></tbody></table>
+    </div>
+    <div class="card" style="border-left:3px solid var(--primary);margin-top:4px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:28px;height:28px;background:var(--primary-light);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg></div>
+        <span class="card-title" style="margin:0">Actividad de Agentes IA</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="stat-row"><span class="stat-label">El Mecánico Virtual — OT #0042 lista para entregar al cliente</span><span class="badge badge-green">Completado</span></div>
+        <div class="stat-row"><span class="stat-label">El Almacenero — filtros de aceite por debajo del mínimo</span><span class="badge badge-amber">Acción requerida</span></div>
+        <div class="stat-row"><span class="stat-label">El Analista — reporte de productividad semanal generado</span><span class="badge badge-green">Completado</span></div>
+        <div class="stat-row"><span class="stat-label">La Recepcionista — turno de servicio agendado para mañana</span><span class="badge badge-blue">En proceso</span></div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+        <button class="btn btn-ghost btn-sm" onclick="gotoPage('agentes')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg> Ver todos los agentes</button>
+      </div>
     </div>
   </div>
 
@@ -1570,28 +1597,31 @@ function renderAgentes(){
   const el=document.getElementById('page-agentes');
   if(!el)return;
   const agents=[
-    {icon:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',tag:'Agente de atención',name:'El Recepcionista',desc:'Un cliente llama para saber si su auto está listo. El agente consulta el estado del trabajo y le responde por WhatsApp al instante, sin interrumpir a los mecánicos.',solves:['Clientes que llaman por service y te olvidás de agendar','Respuestas demoradas que generan mala imagen','Historial del vehículo perdido entre papeles']},
-    {icon:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',tag:'Agente de cobros',name:'El Cobrador',desc:'Presupuestos aprobados o trabajos entregados sin cobrar. El agente hace el seguimiento profesional, registra promesas y envía recordatorios.',solves:['Servicios sin cobrar y cuentas corrientes atrasadas','Clientes que dicen "mañana te paso" y nunca pasan','Tiempo perdido persiguiendo pagos pendientes']},
-    {icon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',tag:'Agente de stock',name:'El Almacenero',desc:'Filtros, aceites, pastillas de freno, repuestos. El agente monitorea el stock y genera órdenes de compra antes de que te quedes sin un repuesto clave.',solves:['Quedarte sin filtro de aceite justo cuando lo necesitás','Demoras en reparaciones por falta de piezas','Stock excesivo de repuestos que no rotan']},
-    {icon:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',tag:'Agente de datos',name:'El Analista',desc:'Qué trabajos dejan más margen, qué técnico es más productivo, cuántos autos pasaron por el taller. Tu dashboard llega solo cada semana.',solves:['No saber qué servicios te dejan más plata','Decisiones basadas en intuición sin datos reales','Perder horas armando reportes manuales']},
-    {icon:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.69a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>',tag:'Agente de contenido',name:'El Community',desc:'Recordatorios de service por km, campañas pre-ruta, consejos de mantenimiento. Contenido que posiciona tu taller como el de confianza.',solves:['No tener tiempo para mostrar tus trabajos en redes','Clientes que no recuerdan dónde hicieron el service','Perder visibilidad frente a talleres de cadena']},
-    {icon:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',tag:'Agente de retención',name:'El Fidelizador',desc:'El Toyota de Pérez hizo 9.800km desde el último service. El agente le escribe antes de llegar a los 10.000: "Ya te toca el cambio de aceite, ¿cuándo lo traés?"',solves:['Autos que no vuelven al próximo service','Clientes que se van a la competencia por olvido','Ingresos irregulares por falta de recurrencia']}
+    {icon:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',tag:'Agente de atención',name:'El Recepcionista',desc:'Un cliente manda WhatsApp a las 8pm: "¿Está listo el Gol de González?" El agente consulta la OT en el sistema y responde con estado, hora estimada y presupuesto aprobado — sin interrumpir al mecánico.',flow:[{t:'detect',l:'Detecta',v:'Mensaje entrante consultando estado del vehículo o agendando turno'},{t:'analyze',l:'Analiza',v:'Busca la OT por patente o nombre, lee estado, técnico asignado y ETA'},{t:'act',l:'Actúa',v:'Responde por WhatsApp con info exacta y avisa al taller si requiere atención'}],solves:['Llamadas que interrumpen a los mecánicos en plena reparación','Respuestas de horas que dañan la imagen del negocio','Historial del vehículo perdido entre papeles y llamadas']},
+    {icon:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',tag:'Agente de cobros',name:'El Cobrador',desc:'La OT 0038 fue entregada hace 12 días y figura "pendiente de pago". El agente envía recordatorio profesional, registra cada respuesta y escala si no hay reacción en 48 horas.',flow:[{t:'detect',l:'Detecta',v:'OT entregada con pago pendiente hace más de 3 días hábiles'},{t:'analyze',l:'Analiza',v:'Días vencidos, monto adeudado e historial de pago del cliente'},{t:'act',l:'Actúa',v:'Envía recordatorio por WhatsApp y registra promesa de pago en el sistema'}],solves:['Servicios entregados que quedan sin cobrar semanas','Clientes que prometen pagar y el taller no hace seguimiento','Horas perdidas persiguiendo cobros uno por uno']},
+    {icon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',tag:'Agente de stock',name:'El Almacenero',desc:'El filtro de aceite Mann quedó en 1 unidad. Hay 3 OTs agendadas para mañana que lo usan. El agente detecta la situación antes de que el mecánico tenga que parar el trabajo por falta de pieza.',flow:[{t:'detect',l:'Detecta',v:'Repuesto baja del stock mínimo o hay demanda proyectada en OTs activas'},{t:'analyze',l:'Analiza',v:'Cruza OTs que necesitan ese repuesto y calcula cantidad óptima a reponer'},{t:'act',l:'Actúa',v:'Genera orden de compra al proveedor preferido antes de que se produzca el quiebre'}],solves:['Parar un trabajo por falta de un repuesto que se acabó','Stock excesivo inmovilizando capital en piezas sin rotación','Compras de emergencia a precio sin negociación']},
+    {icon:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',tag:'Agente de datos',name:'El Analista',desc:'Cada lunes a las 8am: "14 OTs cerradas, margen promedio 61%, servicio más rentable: cambio de correa. Técnico más productivo: Marcos, 6 trabajos." Llega solo, sin que vos armes nada.',flow:[{t:'detect',l:'Detecta',v:'Cierre de semana o período configurado'},{t:'analyze',l:'Analiza',v:'Procesa OTs, mano de obra, repuestos, márgenes por servicio y productividad por técnico'},{t:'act',l:'Actúa',v:'Envía resumen ejecutivo con KPIs clave y recomendaciones accionables'}],solves:['No saber qué servicios dejan más margen neto después de repuestos','Técnicos cuya productividad nunca se mide de forma objetiva','Horas armando reportes en Excel que terminan en el cajón']},
+    {icon:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.69a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>',tag:'Agente de recordatorio',name:'El Community',desc:'El 208 de Ramírez está por llegar a los 9.800km. El agente le manda: "Hola Ramírez, en breve le toca el service de los 10.000km a tu 208. ¿Lo agendamos esta semana?" Con tu nombre de taller, sin que vos lo recuerdes.',flow:[{t:'detect',l:'Detecta',v:'Vehículo próximo a intervalo de service por km o tiempo desde última visita'},{t:'analyze',l:'Analiza',v:'Historial del vehículo, tipo de mantenimiento requerido y técnico habitual'},{t:'act',l:'Actúa',v:'Envía WhatsApp personalizado con link de agendamiento directo en Aura Auto'}],solves:['Perder el service recurrente por no avisar al cliente a tiempo','Clientes que no recuerdan dónde hicieron el último service','Ingresos irregulares por falta de recurrencia planificada']},
+    {icon:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',tag:'Agente de retención',name:'El Fidelizador',desc:'El Focus de Herrera no vuelve al taller desde hace 5 meses. El agente detecta el silencio, verifica que no haya OT activa y lanza una campaña de reactivación con oferta específica para ese vehículo.',flow:[{t:'detect',l:'Detecta',v:'Cliente sin visita registrada hace más de 90 días sin OT ni turno agendado'},{t:'analyze',l:'Analiza',v:'Historial de servicios, valor acumulado y vehículos registrados a su nombre'},{t:'act',l:'Actúa',v:'Envía oferta personalizada de reactivación basada en el historial de mantenimiento'}],solves:['Clientes que se van a la competencia en silencio sin que te enteres','Base de clientes activos que se achica con el tiempo sin razón aparente','Perder clientes rentables por simple falta de contacto post-servicio']}
   ];
-  el.innerHTML=`<div class="page-title">Agentes IA</div>
-<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:14px 18px;background:var(--primary-light);border-radius:10px;border-left:4px solid var(--primary)">
-  <div style="font-size:13px;font-weight:600;color:var(--primary)">6 agentes activos</div>
-  <div style="width:1px;height:16px;background:var(--primary);opacity:.3"></div>
-  <div style="font-size:13px;color:var(--text-secondary)">Automatizando atención, cobros, stock, análisis y fidelización</div>
-</div>
-<div class="agents-grid">${agents.map(a=>`<div class="agent-card">
+  const tpl=agents.map(a=>`<div class="agent-card">
   <div class="agent-header">
     <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">${a.icon}</svg></div>
-    <div><div class="agent-tag">${a.tag}</div><div class="agent-name">${a.name}</div></div>
+    <div style="flex:1"><div class="agent-tag">${a.tag}</div><div class="agent-name">${a.name}</div></div>
+    <span class="agent-status">Activo</span>
   </div>
   <p class="agent-desc">${a.desc}</p>
+  <div class="agent-scenario">Cómo funciona dentro de Aura Auto</div>
+  <div class="agent-flow">${a.flow.map(f=>`<div class="flow-step"><div class="flow-dot ${f.t}">${f.l.slice(0,3).toUpperCase()}</div><div><strong>${f.l}</strong> — ${f.v}</div></div>`).join('')}</div>
+  <div class="agent-scenario" style="margin-top:6px">Problemas que elimina</div>
   <ul class="agent-solves">${a.solves.map(s=>`<li>${s}</li>`).join('')}</ul>
-  <button class="btn btn-pri" style="margin-top:4px;width:100%">Ver en accion</button>
-</div>`).join('')}</div>`;
+</div>`).join('');
+  el.innerHTML=`<div class="page-title">Agentes IA</div>
+<div class="agent-intro">
+  <div class="agent-intro-title">Tus empleados que trabajan 24/7 sin sueldo fijo</div>
+  <div class="agent-intro-sub">Cada agente monitorea el sistema, detecta situaciones clave y actúa solo — atención al cliente, cobros, stock, análisis y retención, automatizados para tu taller mecánico.</div>
+</div>
+<div class="agents-grid">${tpl}</div>`;
 }
 
 // ===== INIT =====
